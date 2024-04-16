@@ -3,9 +3,11 @@
 package com.mycompany.software.administrativo.ventas;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.mycompany.software.administrativo.ventas.views.Client;
 import java.awt.Color;
 import javax.swing.UIManager;
-import com.mycompany.software.administrativo.ventas.views.Main;
+import com.mycompany.software.administrativo.ventas.views.Bill;
+import com.mycompany.software.administrativo.ventas.views.Saller;
 import java.awt.BorderLayout;
 import java.util.Locale;
 
@@ -15,7 +17,6 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();   
         initStyles();
         initContent();
-        
     }
     
     private void initStyles() {
@@ -24,8 +25,13 @@ public class Dashboard extends javax.swing.JFrame {
         
         titleMenu.putClientProperty( "FlatLaf.style", "font: 300% $light.font" );
     }
+    
     private void initContent() {
-        Main main = new Main();
+        this.openBillPane();
+    }
+    
+    private void openBillPane() {
+        Bill main = new Bill();
         main.setSize(750, 430);
         main.setLocation(0, 0);
         
@@ -33,8 +39,28 @@ public class Dashboard extends javax.swing.JFrame {
         content.add(main, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
-                
-              
+    }
+    
+    private void openClientPane() {
+        Client clientPane = new Client();
+        clientPane.setSize(750, 430);
+        clientPane.setLocation(0, 0);
+        
+        content.removeAll();
+        content.add(clientPane, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+    }
+    
+    private void openSallerPane() {
+        Saller sallerPane = new Saller();
+        sallerPane.setSize(750, 430);
+        sallerPane.setLocation(0, 0);
+        
+        content.removeAll();
+        content.add(sallerPane, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
     }
 
     /**
@@ -62,7 +88,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         menu.setBackground(new java.awt.Color(13, 71, 161));
 
-        jButton2.setText("Sales");
+        jButton2.setText("Bills");
         jButton2.setBorder(null);
         jButton2.setBorderPainted(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -72,7 +98,19 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("jButton4");
+        jButton3.setText("Clients");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Saller");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         titleMenu.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         titleMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -189,7 +227,18 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // set main in content panel Main
+        this.openBillPane();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        openClientPane();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        openSallerPane();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
