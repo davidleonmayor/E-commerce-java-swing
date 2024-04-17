@@ -11,6 +11,7 @@ import com.mycompany.software.administrativo.ventas.views.Saller;
 import java.awt.BorderLayout;
 import java.util.Locale;
 
+import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 public class Dashboard extends javax.swing.JFrame {
 
     public Dashboard() {
@@ -24,6 +25,10 @@ public class Dashboard extends javax.swing.JFrame {
         menssajeHeader.setForeground(Color.BLACK);
         
         titleMenu.putClientProperty( "FlatLaf.style", "font: 300% $light.font" );
+        
+        // print databse bills contet 
+        ConnectionDB connectionDB = new ConnectionDB();
+        connectionDB.selectAllBills();
     }
     
     private void initContent() {
