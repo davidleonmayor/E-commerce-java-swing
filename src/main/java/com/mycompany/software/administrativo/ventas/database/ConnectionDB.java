@@ -12,12 +12,13 @@ import java.util.logging.Logger;
 
 public class ConnectionDB {
     private String nameDatabase = "software_administrativo_ventas";
-    protected Connection con;
-    private Statement stmt;
-    private ResultSet rs;
     private String usuario = "root";
     private String clave = "";
     private String url = "jdbc:mysql://localhost:3306/" + nameDatabase;
+
+    protected Connection con;
+    private Statement stmt;
+    private ResultSet rs;    
 
     public ConnectionDB() {
         try {
@@ -31,8 +32,8 @@ public class ConnectionDB {
     
     public void insertUsuario() {
         try {
-            stmt.executeUpdate("INSERT INTO usuarios (nombre) VALUES ('san')");
-            stmt.executeUpdate("INSERT INTO usuarios (nombre) VALUES ('david')");
+            stmt.executeUpdate("INSERT INTO 	clients (document, names, last_names) VALUES (0123456789, 'santiago', 'torres morocho')");
+            stmt.executeUpdate("INSERT INTO 	clients (document, names, last_names) VALUES (0987654321, 'jesus david', 'leon')");
         } catch (SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }

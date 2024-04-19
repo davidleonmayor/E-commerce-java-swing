@@ -9,26 +9,31 @@ import javax.swing.UIManager;
 import com.mycompany.software.administrativo.ventas.views.Bill;
 import com.mycompany.software.administrativo.ventas.views.Saller;
 import java.awt.BorderLayout;
-import java.util.Locale;
+//import java.util.Locale;
 
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+//import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.database.BillQuery;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Dashboard extends javax.swing.JFrame {
 
-    public Dashboard() {
+    public Dashboard() throws SQLException {
         initComponents();   
         initStyles();
         initContent();
     }
     
-    private void initStyles() {
+    private void initStyles() throws SQLException {
         menssajeHeader.putClientProperty( "FlatLaf.style", "font: 200% $light.font" );
         menssajeHeader.setForeground(Color.BLACK);
         
         titleMenu.putClientProperty( "FlatLaf.style", "font: 300% $light.font" );
         
         // print databse bills contet 
-        ConnectionDB connectionDB = new ConnectionDB();
-        connectionDB.selectAllBills();
+        BillQuery billQuery = new BillQuery();
+        billQuery.all();
     }
     
     private void initContent() {
@@ -260,7 +265,11 @@ public class Dashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dashboard().setVisible(true);
+                try {
+                    new Dashboard().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
