@@ -250,9 +250,6 @@ public class Dashboard extends javax.swing.JFrame {
         openSallerPane();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         // TODO: Look and feel don't work
