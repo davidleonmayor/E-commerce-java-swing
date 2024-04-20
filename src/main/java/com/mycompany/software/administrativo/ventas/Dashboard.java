@@ -2,14 +2,16 @@
 
 package com.mycompany.software.administrativo.ventas;
 
-import com.formdev.flatlaf.FlatLightLaf;
+
 import com.mycompany.software.administrativo.ventas.views.Client;
+import com.mycompany.software.administrativo.ventas.views.OptionCrudBill;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import javax.swing.UIManager;
 import com.mycompany.software.administrativo.ventas.views.Bill;
 import com.mycompany.software.administrativo.ventas.views.Saller;
 import java.awt.BorderLayout;
-//import java.util.Locale;
+
 
 //import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.database.BillQuery;
@@ -37,16 +39,16 @@ public class Dashboard extends javax.swing.JFrame {
     }
     
     private void initContent() {
-        this.openBillPane();
+        this.openOptionCrudBillPane();
     }
-    
-    private void openBillPane() {
-        Bill main = new Bill();
-        main.setSize(750, 430);
-        main.setLocation(0, 0);
-        
+
+    private void openOptionCrudBillPane () {
+        OptionCrudBill OptionCrudBillPane = new OptionCrudBill();
+        OptionCrudBillPane.setSize(750, 430);
+        OptionCrudBillPane.setLocation(0, 0);
+
         content.removeAll();
-        content.add(main, BorderLayout.CENTER);
+        content.add(OptionCrudBillPane, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
     }
@@ -236,17 +238,14 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // set main in content panel Main
-        this.openBillPane();
+        this.openOptionCrudBillPane();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
         openClientPane();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
         openSallerPane();
     }//GEN-LAST:event_jButton4ActionPerformed
 
