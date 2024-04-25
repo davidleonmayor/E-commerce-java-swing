@@ -9,6 +9,22 @@ public class CreateBill extends javax.swing.JFrame {
 
     public CreateBill() {
         initComponents();
+        this.initContent();
+    }
+    
+    private void initContent() {
+        this.openScrollProducts();
+    }
+
+    private void openScrollProducts () {
+        ScrollProducts scrollProductsPane = new ScrollProducts();
+        scrollProductsPane.setSize(750, 430);
+        scrollProductsPane.setLocation(0, 0);
+
+        ProductsContent.removeAll();
+        ProductsContent.add(scrollProductsPane, BorderLayout.CENTER);
+        ProductsContent.revalidate();
+        ProductsContent.repaint();
     }
 
     /**
@@ -33,7 +49,7 @@ public class CreateBill extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        ProductsContnet = new javax.swing.JPanel();
+        ProductsContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,27 +123,17 @@ public class CreateBill extends javax.swing.JFrame {
                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
                 .addGap(32, 32, 32))
         );
 
-        ProductsContnet.setBackground(new java.awt.Color(242, 24, 24));
-        ProductsContnet.setOpaque(false);
-        ProductsContnet.setVerifyInputWhenFocusTarget(false);
-
-        javax.swing.GroupLayout ProductsContnetLayout = new javax.swing.GroupLayout(ProductsContnet);
-        ProductsContnet.setLayout(ProductsContnetLayout);
-        ProductsContnetLayout.setHorizontalGroup(
-            ProductsContnetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 544, Short.MAX_VALUE)
-        );
-        ProductsContnetLayout.setVerticalGroup(
-            ProductsContnetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        ProductsContent.setBackground(new java.awt.Color(242, 24, 24));
+        ProductsContent.setOpaque(false);
+        ProductsContent.setVerifyInputWhenFocusTarget(false);
+        ProductsContent.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -135,15 +141,17 @@ public class CreateBill extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ProductsContnet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(ProductsContent, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ProductsContnet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(ProductsContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -177,10 +185,10 @@ public class CreateBill extends javax.swing.JFrame {
             containerProductEspesification.setSize(750, 430);
             containerProductEspesification.setLocation(0, 0);
 
-            ProductsContnet.removeAll();
-            ProductsContnet.add(containerProductEspesification, BorderLayout.CENTER);
-            ProductsContnet.revalidate();
-            ProductsContnet.repaint();
+            ProductsContent.removeAll();
+            ProductsContent.add(containerProductEspesification, BorderLayout.CENTER);
+            ProductsContent.revalidate();
+            ProductsContent.repaint();
         } catch (NumberFormatException e) {
             System.err.println("Error en la entrada de datos numéricos: " + e.getMessage());
         }
@@ -223,7 +231,7 @@ public class CreateBill extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel ProductsContnet;
+    private javax.swing.JPanel ProductsContent;
     private javax.swing.JTextField inputNameProduct;
     private javax.swing.JTextField inputQualityProduct;
     private javax.swing.JTextField inputUnitaryValueProduct;
