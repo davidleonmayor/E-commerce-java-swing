@@ -10,10 +10,10 @@
 
 package com.mycompany.software.administrativo.ventas;
 
-import com.mycompany.software.administrativo.ventas.database.BillQuery;
+//import com.mycompany.software.administrativo.ventas.database.BillQuery;
 import java.sql.SQLException;
 
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+//import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 
 public class SoftwareAdministrativoVentas {
 
@@ -21,7 +21,7 @@ public class SoftwareAdministrativoVentas {
         System.out.println("Hello World!");
         new Dashboard().setVisible(true);
         
-        ConnectionDB connectionDB = new ConnectionDB();
-        connectionDB.insertBillAndDetails();
+//        ConnectionDB connectionDB = new ConnectionDB();
+//        //connectionDB.insertBill();
     }
 }
