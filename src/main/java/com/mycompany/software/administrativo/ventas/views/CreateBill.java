@@ -1,24 +1,90 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.tools.ProductSpecification;
+import com.mycompany.software.administrativo.ventas.database.BillQuery;
+import com.mycompany.software.administrativo.ventas.tools.Product;
+import com.mycompany.software.administrativo.ventas.tools.Bill;
+import java.sql.SQLException;
 
-import java.awt.Component;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.JOptionPane;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.UIManager;
 
+// TODO:
+// 1) Manage and check data input user
+// 2) Sendd to data base, related each input with jis own
 public class CreateBill extends javax.swing.JFrame {
 
-    private ArrayList<ProductSpecification> qualityProducts = new ArrayList<ProductSpecification>();
+    private ArrayList<Product> qualityProducts = new ArrayList<Product>();
 
     public CreateBill() {
         initComponents();
     }
 
     private void setItemInQualityProducts(String name, float unitValue, int quantity) {
-//        ProductSpecification product = new ProductSpecification(name, unitValue, quantity);
-//        qualityProducts.add(product.getName(), product.getUnitValue(), product.getQuantity());
-        qualityProducts.add(new ProductSpecification(name, unitValue, quantity));
+        qualityProducts.add(new Product(name, unitValue, quantity));
+    }
+
+    private void finalizeBill() throws SQLException {
+        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+        int buyOptionSelected = this.MyOptionPane();
+
+        // addBill to create a new bill. Needs a new Bill
+        Bill bill = new Bill(documentUser, documentSeller, getCurrentDate(), getCurrentTime());
+        // rellenar los detalles de la factura
+        BillQuery billQuery = new BillQuery();
+        // billQuery.add(Bill bill, ArrayList<Product> listProducts, int idPaymentMethod);
+        billQuery.add(bill, buyOptionSelected, qualityProducts);
+    }
+
+    private String getCurrentDate() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return now.format(formatter);
+    }
+
+    private String getCurrentTime() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return now.format(formatter);
+    }
+
+    public int MyOptionPane() {
+        Icon errorIcon = UIManager.getIcon("OptionPane.errorIcon");
+        Object[] possibilities = {"debit card", "credit card", "cash", "checks"};
+        String selectedOption = (String) JOptionPane.showInputDialog(null,
+                "Seleccina el metodo de pago: ", "ShowInputDialog",
+                JOptionPane.PLAIN_MESSAGE, errorIcon, possibilities, "Numbers");
+
+        int paymentMethod;
+        switch (selectedOption) {
+            case "debit card":
+                paymentMethod = 1;
+                break;
+            case "credit card":
+                paymentMethod = 2;
+                break;
+            case "cash":
+                paymentMethod = 3;
+                break;
+            case "checks":
+                paymentMethod = 4;
+                break;
+            default:
+                paymentMethod = -1; // Valor por defecto en caso de que no se seleccione ninguna opción
+                break;
+        }
+
+        System.out.println(paymentMethod);
+        return paymentMethod;
     }
 
     @SuppressWarnings("unchecked")
@@ -158,29 +224,11 @@ public class CreateBill extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        for (ProductSpecification product : qualityProducts) {
-            // Imprimir los detalles del producto en la consola
-            System.out.println("Name: " + product.getName());
-            System.out.println("Unit Value: " + product.getUnitValue());
-            System.out.println("Quality: " + product.getQuantity());
-            System.out.println();
+        try {
+            this.finalizeBill();
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateBill.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        // Obtener el contenedor del scrollProductsPane
-//        JPanel innerPanel = (JPanel) scrollProductsPane.getViewport().getView();
-//
-//        // Recorrer todos los componentes en el panel interno
-//        for (Component component : innerPanel.getComponents()) {
-//            // Verificar si el componente es una instancia de ContainerProductEspesification
-//            if (component instanceof ContainerProductEspesification) {
-//                ContainerProductEspesification product = (ContainerProductEspesification) component;
-//
-//                // Imprimir los detalles del producto en la consola
-//                System.out.println("Name: " + product.getName());
-////                System.out.println("Unit Value: " + product.getUnitValue());
-////                System.out.println("Quality: " + product.getQuality());
-//                System.out.println();
-//            }
-//        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

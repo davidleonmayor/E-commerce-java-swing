@@ -20,5 +20,8 @@ public class SoftwareAdministrativoVentas {
     public static void main(String[] args) throws SQLException {
         System.out.println("Hello World!");
         new Dashboard().setVisible(true);
+        
+        ConnectionDB connectionDB = new ConnectionDB();
+        connectionDB.insertBillAndDetails();
     }
 }

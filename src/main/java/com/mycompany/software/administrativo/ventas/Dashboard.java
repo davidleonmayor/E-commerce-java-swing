@@ -8,12 +8,10 @@ import com.mycompany.software.administrativo.ventas.views.OptionCrudBill;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import javax.swing.UIManager;
-import com.mycompany.software.administrativo.ventas.views.Bill;
 import com.mycompany.software.administrativo.ventas.views.Saller;
 import java.awt.BorderLayout;
 
 
-//import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.database.BillQuery;
 import java.sql.SQLException;
 import java.util.logging.Level;
