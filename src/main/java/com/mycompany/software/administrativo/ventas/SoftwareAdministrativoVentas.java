@@ -13,7 +13,7 @@ package com.mycompany.software.administrativo.ventas;
 //import com.mycompany.software.administrativo.ventas.database.BillQuery;
 import java.sql.SQLException;
 
-//import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 
 public class SoftwareAdministrativoVentas {
 
@@ -23,5 +23,7 @@ public class SoftwareAdministrativoVentas {
         
 //        ConnectionDB connectionDB = new ConnectionDB();
 //        //connectionDB.insertBill();
+//        ConnectionDB connectionDB = new ConnectionDB();
+//        connectionDB.deleteBill(1);
     }
 }

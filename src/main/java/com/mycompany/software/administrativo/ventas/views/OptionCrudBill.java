@@ -2,7 +2,7 @@
 package com.mycompany.software.administrativo.ventas.views;
 
 public class OptionCrudBill extends javax.swing.JPanel {
-    
+
     public OptionCrudBill() {
         initComponents();
     }
@@ -94,7 +94,9 @@ public class OptionCrudBill extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        // TODO: open frame add Bill
+        RemoveBill removeBillFrame = new RemoveBill();
+        removeBillFrame.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

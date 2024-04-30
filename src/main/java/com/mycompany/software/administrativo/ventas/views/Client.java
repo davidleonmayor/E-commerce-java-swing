@@ -1,14 +1,7 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-/**
- *
- * @author jdavi
- */
 public class Client extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Client
-     */
     public Client() {
         initComponents();
     }

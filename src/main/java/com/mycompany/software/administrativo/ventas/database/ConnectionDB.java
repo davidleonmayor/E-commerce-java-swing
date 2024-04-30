@@ -137,7 +137,43 @@ public class ConnectionDB {
     }
 }
 
+    public void deleteBill(int idBill) {
+        try {
+        
+        stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBill);
+        //
+        stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
+        //
+        stmt.executeUpdate("DELETE FROM `bills` WHERE `id_bill` = " + idBill);
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }
+    
+    public void deleteBillAndDetails(int idBill) {
+    try {
+        // Obtiene el id_bill_detail asociado con el idBill
+        rs = stmt.executeQuery("SELECT id_bill_detail FROM bill_details WHERE id_bill = " + idBill);
+        if (rs.next()) {
+            int idBillDetail = rs.getInt("id_bill_detail");
 
+            // Primero, elimina los productos relacionados con los detalles de la factura
+            stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBillDetail);
+        }
+
+        // Luego, elimina los detalles de la factura
+        stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
+
+        // Finalmente, elimina la factura
+        stmt.executeUpdate("DELETE FROM `bills` WHERE `id_bill` = " + idBill);
+    } catch (SQLException ex) {
+        Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        ex.printStackTrace();
+    }
+}
+
+    
     public void verifyInsertion() {
         try {
             // Verifica la inserción en la tabla 'bills'
@@ -182,8 +218,9 @@ public class ConnectionDB {
 
 //    public static void main(String[] args) {
 //        ConnectionDB connectionDB = new ConnectionDB();
-//        // connectionDB.insertBill();
-//        connectionDB.verifyInsertion();
+//        connectionDB.deleteBill(1);
+////        // connectionDB.insertBill();
+////        connectionDB.verifyInsertion();
 //    }
 
 }
