@@ -79,101 +79,112 @@ public class ConnectionDB {
         }
     }
 
-//    public void insertBillAndDetails() {
-//        System.out.println("----------------medodo de validacion--------------");
-//        try {
-//            // Inserta en la tabla 'bills'
-//            stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `id_bill_client`, `id_bill_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '1', '2', '1', '2024-04-03', '12:24:37')", Statement.RETURN_GENERATED_KEYS);
-//
-//            // Obtiene el último ID insertado en 'bills'
-//            ResultSet generatedKeys = stmt.getGeneratedKeys();
-//            if (generatedKeys.next()) {
-//                int lastIdInBills = generatedKeys.getInt(1);
-//
-//                // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
-//                stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", NULL)", Statement.RETURN_GENERATED_KEYS);
-//
-//                // Obtiene el último ID insertado en 'bill_details'
-//                generatedKeys = stmt.getGeneratedKeys();
-//                if (generatedKeys.next()) {
-//                    int lastIdInBillDetails = generatedKeys.getInt(1);
-//
-//                    // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
-//                    stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, 'prueba introducio a la base de datos', '0', '0', " + lastIdInBillDetails + ")");
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-//            ex.printStackTrace();
-//        }
-//    }
-    
     public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, String productName, double unitValue, int quantity) {
-    System.out.println("----------------medodo de validacion--------------");
-    try {
-        // Inserta en la tabla 'bills'
-        stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `id_bill_client`, `id_bill_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '" + idBillClient + "', '" + idBillSeller + "', '" + idBillBox + "', '" + fecha + "', '" + hora + "')", Statement.RETURN_GENERATED_KEYS);
-
-        // Obtiene el último ID insertado en 'bills'
-        ResultSet generatedKeys = stmt.getGeneratedKeys();
-        if (generatedKeys.next()) {
-            int lastIdInBills = generatedKeys.getInt(1);
-
-            // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
-            stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", '" + paymentMethod + "')", Statement.RETURN_GENERATED_KEYS);
-
-            // Obtiene el último ID insertado en 'bill_details'
-            generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int lastIdInBillDetails = generatedKeys.getInt(1);
-
-                // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
-                stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + productName + "', '" + unitValue + "', '" + quantity + "', " + lastIdInBillDetails + ")");
-            }
-        }
-    } catch (SQLException ex) {
-        Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-        ex.printStackTrace();
-    }
-}
-
-    public void deleteBill(int idBill) {
+        System.out.println("----------------medodo de validacion--------------");
         try {
-        
-        stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBill);
-        //
-        stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
-        //
-        stmt.executeUpdate("DELETE FROM `bills` WHERE `id_bill` = " + idBill);
+            // Inserta en la tabla 'bills'
+            stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `id_bill_client`, `id_bill_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '" + idBillClient + "', '" + idBillSeller + "', '" + idBillBox + "', '" + fecha + "', '" + hora + "')", Statement.RETURN_GENERATED_KEYS);
+
+            // Obtiene el último ID insertado en 'bills'
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int lastIdInBills = generatedKeys.getInt(1);
+
+                // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
+                stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", '" + paymentMethod + "')", Statement.RETURN_GENERATED_KEYS);
+
+                // Obtiene el último ID insertado en 'bill_details'
+                generatedKeys = stmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int lastIdInBillDetails = generatedKeys.getInt(1);
+
+                    // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
+                    stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + productName + "', '" + unitValue + "', '" + quantity + "', " + lastIdInBillDetails + ")");
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
     }
-    
-    public void deleteBillAndDetails(int idBill) {
-    try {
-        // Obtiene el id_bill_detail asociado con el idBill
-        rs = stmt.executeQuery("SELECT id_bill_detail FROM bill_details WHERE id_bill = " + idBill);
-        if (rs.next()) {
-            int idBillDetail = rs.getInt("id_bill_detail");
 
-            // Primero, elimina los productos relacionados con los detalles de la factura
-            stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBillDetail);
+    public void deleteBill(int idBill) {
+        try {
+
+            stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBill);
+            //
+            stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
+            //
+            stmt.executeUpdate("DELETE FROM `bills` WHERE `id_bill` = " + idBill);
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-
-        // Luego, elimina los detalles de la factura
-        stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
-
-        // Finalmente, elimina la factura
-        stmt.executeUpdate("DELETE FROM `bills` WHERE `id_bill` = " + idBill);
-    } catch (SQLException ex) {
-        Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-        ex.printStackTrace();
     }
-}
 
-    
+    public void deleteBillAndDetails(int idBill) {
+        try {
+            // Obtiene el id_bill_detail asociado con el idBill
+            rs = stmt.executeQuery("SELECT id_bill_detail FROM bill_details WHERE id_bill = " + idBill);
+            if (rs.next()) {
+                int idBillDetail = rs.getInt("id_bill_detail");
+
+                // Primero, elimina los productos relacionados con los detalles de la factura
+                stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBillDetail);
+            }
+
+            // Luego, elimina los detalles de la factura
+            stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
+
+            // Finalmente, elimina la factura
+            stmt.executeUpdate("DELETE FROM `bills` WHERE `id_bill` = " + idBill);
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }
+
+    public void getBill(int idBill) {
+        try {
+            // Prepara la consulta SQL
+            String rawQueryBill = "SELECT b.id_bill, b.fecha, b.hora, "
+                    + "c.names AS client_name, c.last_names AS client_last_name, "
+                    + "s.names AS seller_name, s.last_names AS seller_last_name, "
+                    + "x.box_number, bd.payment_method, "
+                    + "p.product_name, p.unit_value, p.quantity "
+                    + "FROM bills b "
+                    + "JOIN clients c ON b.id_bill_client = c.id_client "
+                    + "JOIN sellers s ON b.id_bill_seller = s.id_seller "
+                    + "JOIN boxes x ON b.id_bill_box = x.id_box "
+                    + "JOIN bill_details bd ON b.id_bill = bd.id_bill "
+                    + "JOIN products p ON bd.id_bill_detail = p.id_bill_details_product "
+                    + "WHERE b.id_bill = " + idBill + " "
+                    + "ORDER BY bd.id_bill_detail;";
+
+            // Ejecuta la consulta
+            rs = stmt.executeQuery(rawQueryBill);
+
+            // Imprime los resultados
+            System.out.println("------------------- get bill-----------");
+            while (rs.next()) {
+                System.out.println("Factura ID: " + rs.getInt("id_bill")
+                        + "\nCliente: " + rs.getString("client_name") + " " + rs.getString("client_last_name")
+                        + "\nVendedor: " + rs.getString("seller_name") + " " + rs.getString("seller_last_name")
+                        + "\nNúmero de Caja: " + rs.getInt("box_number")
+                        + "\nFecha: " + rs.getDate("fecha")
+                        + "\nHora: " + rs.getTime("hora")
+                        + "\nProducto: " + rs.getString("product_name")
+                        + ", Valor unitario: " + rs.getInt("unit_value")
+                        + ", Cantidad: " + rs.getInt("quantity")
+                        + ", Método de pago: " + rs.getString("payment_method")
+                        + "\n--------------------");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }
+
     public void verifyInsertion() {
         try {
             // Verifica la inserción en la tabla 'bills'
@@ -222,5 +233,4 @@ public class ConnectionDB {
 ////        // connectionDB.insertBill();
 ////        connectionDB.verifyInsertion();
 //    }
-
 }
