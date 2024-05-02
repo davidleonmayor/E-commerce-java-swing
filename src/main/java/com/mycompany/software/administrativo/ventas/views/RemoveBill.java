@@ -190,6 +190,9 @@ public class RemoveBill extends javax.swing.JFrame {
         System.out.println("linea: 190. ID, elemento a eliminar en la base de dato" + uniqueIDBill);
         ConnectionDB connectionDB = new ConnectionDB();
         connectionDB.getBill(uniqueIDBill);
+        
+        // clear input boxes
+        inputIDBill.setText("");
 //        try {
 //            this.finalizeBill();
 //            // insertBill();

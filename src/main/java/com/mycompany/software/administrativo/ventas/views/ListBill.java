@@ -207,6 +207,8 @@ public class ListBill extends javax.swing.JFrame {
         ConnectionDB connectionDB = new ConnectionDB();
         connectionDB.getBill(inputIDBillToDelete);
         
+        // clear input boxes
+        inputIDBill.setText("");
 //        try {
 //            this.finalizeBill();
 //            // insertBill();

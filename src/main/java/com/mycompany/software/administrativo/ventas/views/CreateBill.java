@@ -64,6 +64,10 @@ public class CreateBill extends javax.swing.JFrame {
         int quality = Integer.parseInt(inputQualityProduct.getText());
         connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
 
+        // clear input boxes
+        inputNameProduct.setText("");
+        inputUnitaryValueProduct.setText("");
+        inputQualityProduct.setText("");
         //  ------------------ past code
 //        // addBill to create a new bill. Needs a new Bill
 //        Bill bill = new Bill(documentUser, documentSeller, getCurrentDate(), getCurrentTime());
