@@ -48,10 +48,11 @@ public class CreateBill extends javax.swing.JFrame {
     }
 
     private void finalizeBill() throws SQLException {
+        // input data user
         int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
         int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
         int buyOptionSelected = this.MyOptionPane();
-
+        // initialize the SQL query
         ConnectionDB connectionDB = new ConnectionDB();
         int idBillClientDefult = 1;
         int idBillSellerDefult = 2;
@@ -62,6 +63,7 @@ public class CreateBill extends javax.swing.JFrame {
         String nameProduct = inputNameProduct.getText();
         float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
         int quality = Integer.parseInt(inputQualityProduct.getText());
+        // execute query
         connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
 
         // clear input boxes
@@ -128,7 +130,7 @@ public class CreateBill extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setText("Name");
+        jLabel2.setText("Product Name");
 
         jLabel3.setText("Unit Value");
 

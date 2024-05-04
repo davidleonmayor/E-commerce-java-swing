@@ -1,5 +1,8 @@
 package com.mycompany.software.administrativo.ventas.database;
 
+import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
+import java.util.List;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Statement;
@@ -7,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,6 +83,27 @@ public class ConnectionDB {
         }
     }
 
+    public List<Integer> filterBills(String filterText) {
+        List<Integer> matchingIds = new ArrayList<>();
+        try {
+            // Prepara la consulta SQL
+            String rawQueryBill = "SELECT id_bill FROM bills WHERE id_bill LIKE '%" + filterText + "%'";
+
+            // Ejecuta la consulta
+            rs = stmt.executeQuery(rawQueryBill);
+
+            // Agrega las IDs a la lista
+            while (rs.next()) {
+                int id = rs.getInt("id_bill");
+                matchingIds.add(id);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        return matchingIds;
+    }
+
     public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, String productName, double unitValue, int quantity) {
         System.out.println("----------------medodo de validacion--------------");
         try {
@@ -144,9 +169,9 @@ public class ConnectionDB {
         }
     }
 
-    public void getBill(int idBill) {
+    public BillSpecification getBill(int idBill) throws SQLException {
+        BillSpecification billSpecification = null;
         try {
-            // Prepara la consulta SQL
             String rawQueryBill = "SELECT b.id_bill, b.fecha, b.hora, "
                     + "c.names AS client_name, c.last_names AS client_last_name, "
                     + "s.names AS seller_name, s.last_names AS seller_last_name, "
@@ -160,29 +185,33 @@ public class ConnectionDB {
                     + "JOIN products p ON bd.id_bill_detail = p.id_bill_details_product "
                     + "WHERE b.id_bill = " + idBill + " "
                     + "ORDER BY bd.id_bill_detail;";
-
-            // Ejecuta la consulta
             rs = stmt.executeQuery(rawQueryBill);
 
-            // Imprime los resultados
-            System.out.println("------------------- get bill-----------");
-            while (rs.next()) {
-                System.out.println("Factura ID: " + rs.getInt("id_bill")
-                        + "\nCliente: " + rs.getString("client_name") + " " + rs.getString("client_last_name")
-                        + "\nVendedor: " + rs.getString("seller_name") + " " + rs.getString("seller_last_name")
-                        + "\nNúmero de Caja: " + rs.getInt("box_number")
-                        + "\nFecha: " + rs.getDate("fecha")
-                        + "\nHora: " + rs.getTime("hora")
-                        + "\nProducto: " + rs.getString("product_name")
-                        + ", Valor unitario: " + rs.getInt("unit_value")
-                        + ", Cantidad: " + rs.getInt("quantity")
-                        + ", Método de pago: " + rs.getString("payment_method")
-                        + "\n--------------------");
+            if (rs.next()) {
+                billSpecification = new BillSpecification();
+                billSpecification.setId(rs.getInt("id_bill"));
+                billSpecification.setFecha(rs.getDate("fecha"));
+                billSpecification.setHora(rs.getTime("hora"));
+                billSpecification.setClientName(rs.getString("client_name"));
+                billSpecification.setClientLastName(rs.getString("client_last_name"));
+                billSpecification.setSellerName(rs.getString("seller_name"));
+                billSpecification.setSellerLastName(rs.getString("seller_last_name"));
+                billSpecification.setBoxNumber(rs.getInt("box_number"));
+                billSpecification.setPaymentMethod(rs.getString("payment_method"));
+                billSpecification.setProductName(rs.getString("product_name"));
+                billSpecification.setUnitValue(rs.getInt("unit_value"));
+                billSpecification.setQuantity(rs.getInt("quantity"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
         }
+
+        return billSpecification;
     }
 
     public void verifyInsertion() {
@@ -226,11 +255,4 @@ public class ConnectionDB {
             ex.printStackTrace();
         }
     }
-
-//    public static void main(String[] args) {
-//        ConnectionDB connectionDB = new ConnectionDB();
-//        connectionDB.deleteBill(1);
-////        // connectionDB.insertBill();
-////        connectionDB.verifyInsertion();
-//    }
 }
