@@ -1,6 +1,7 @@
 package com.mycompany.software.administrativo.ventas.database;
 
 import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
+import com.mycompany.software.administrativo.ventas.tools.Product;
 import java.util.List;
 
 import java.sql.Connection;
@@ -104,7 +105,35 @@ public class ConnectionDB {
         return matchingIds;
     }
 
-    public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, String productName, double unitValue, int quantity) {
+//    public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, String productName, double unitValue, int quantity) {
+//        System.out.println("----------------medodo de validacion--------------");
+//        try {
+//            // Inserta en la tabla 'bills'
+//            stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `id_bill_client`, `id_bill_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '" + idBillClient + "', '" + idBillSeller + "', '" + idBillBox + "', '" + fecha + "', '" + hora + "')", Statement.RETURN_GENERATED_KEYS);
+//
+//            // Obtiene el último ID insertado en 'bills'
+//            ResultSet generatedKeys = stmt.getGeneratedKeys();
+//            if (generatedKeys.next()) {
+//                int lastIdInBills = generatedKeys.getInt(1);
+//
+//                // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
+//                stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", '" + paymentMethod + "')", Statement.RETURN_GENERATED_KEYS);
+//
+//                // Obtiene el último ID insertado en 'bill_details'
+//                generatedKeys = stmt.getGeneratedKeys();
+//                if (generatedKeys.next()) {
+//                    int lastIdInBillDetails = generatedKeys.getInt(1);
+//
+//                    // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
+//                    stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + productName + "', '" + unitValue + "', '" + quantity + "', " + lastIdInBillDetails + ")");
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+//            ex.printStackTrace();
+//        }
+//    }
+    public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, List<Product> products) {
         System.out.println("----------------medodo de validacion--------------");
         try {
             // Inserta en la tabla 'bills'
@@ -112,19 +141,23 @@ public class ConnectionDB {
 
             // Obtiene el último ID insertado en 'bills'
             ResultSet generatedKeys = stmt.getGeneratedKeys();
+            int lastIdInBills = -1;
             if (generatedKeys.next()) {
-                int lastIdInBills = generatedKeys.getInt(1);
+                lastIdInBills = generatedKeys.getInt(1);
 
                 // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
                 stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", '" + paymentMethod + "')", Statement.RETURN_GENERATED_KEYS);
 
                 // Obtiene el último ID insertado en 'bill_details'
                 generatedKeys = stmt.getGeneratedKeys();
+                int lastIdInBillDetails = -1;
                 if (generatedKeys.next()) {
-                    int lastIdInBillDetails = generatedKeys.getInt(1);
+                    lastIdInBillDetails = generatedKeys.getInt(1);
 
                     // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
-                    stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + productName + "', '" + unitValue + "', '" + quantity + "', " + lastIdInBillDetails + ")");
+                    for (Product product : products) {
+                        stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + product.getProductName() + "', '" + product.getUnitValue() + "', '" + product.getQuantity() + "', " + lastIdInBillDetails + ")");
+                    }
                 }
             }
         } catch (SQLException ex) {

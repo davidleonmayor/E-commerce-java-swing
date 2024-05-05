@@ -4,13 +4,11 @@ public class Product {
     private String name;
     private float unitValue;
     private int quantity;
-//    private int idBillDetailsProduct ;
 
-    public Product(String name, float unitValue, int quantity /* , int idBillDetailsProduct */) {
+    public Product(String name, float unitValue, int quantity) {
         this.name = name;
         this.unitValue = unitValue;
         this.quantity = quantity;
-//        this.idBillDetailsProduct = idBillDetailsProduct;
     }
     
     public String getProductName() {
@@ -24,8 +22,4 @@ public class Product {
     public int getQuantity() {
         return quantity;
     }
-
-//    public int getIdBillDetailsProduct() {
-//        return idBillDetailsProduct;
-//    }
 }

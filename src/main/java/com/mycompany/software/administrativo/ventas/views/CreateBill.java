@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -20,7 +21,7 @@ import javax.swing.UIManager;
 // 2) Sendd to data base, related each input with jis own
 public class CreateBill extends javax.swing.JFrame {
 
-    private ArrayList<Product> qualityProducts = new ArrayList<Product>();
+    private List<Product> qualityProducts = new ArrayList<>();
 
     public CreateBill() {
         initComponents();
@@ -43,28 +44,53 @@ public class CreateBill extends javax.swing.JFrame {
     }
 
     private void finalizeBill() throws SQLException {
-        // input data user
-        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
-        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
-        int buyOptionSelected = this.MyOptionPane();
-        // initialize the SQL query
-        ConnectionDB connectionDB = new ConnectionDB();
-        int idBillClientDefult = 1;
-        int idBillSellerDefult = 2;
-        int idBillBoxDefult = 2;
-        String currentDate = this.getCurrentDate();
-        String currentTime = this.getCurrentTime();
-        String paymentMethod = "1";
-        String nameProduct = inputNameProduct.getText();
-        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
-        int quality = Integer.parseInt(inputQualityProduct.getText());
-        // execute query
-        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
+            // input data user
+    int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+    int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+    int buyOptionSelected = this.MyOptionPane();
+    // initialize the SQL query
+    ConnectionDB connectionDB = new ConnectionDB();
+    int idBillClientDefult = 1;
+    int idBillSellerDefult = 2;
+    int idBillBoxDefult = 2;
+    String currentDate = this.getCurrentDate();
+    String currentTime = this.getCurrentTime();
+    String paymentMethod = "1";
 
-        // clear input boxes
-        inputNameProduct.setText("");
-        inputUnitaryValueProduct.setText("");
-        inputQualityProduct.setText("");
+    // execute query
+    connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
+
+    // clear input boxes
+    inputNameProduct.setText("");
+    inputUnitaryValueProduct.setText("");
+    inputQualityProduct.setText("");
+    
+    
+    // ------------- code pass method -------------
+        
+        
+//        // input data user
+//        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+//        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+//        int buyOptionSelected = this.MyOptionPane();
+//        // initialize the SQL query
+//        ConnectionDB connectionDB = new ConnectionDB();
+//        int idBillClientDefult = 1;
+//        int idBillSellerDefult = 2;
+//        int idBillBoxDefult = 2;
+//        String currentDate = this.getCurrentDate();
+//        String currentTime = this.getCurrentTime();
+//        String paymentMethod = "1";
+//        String nameProduct = inputNameProduct.getText();
+//        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
+//        int quality = Integer.parseInt(inputQualityProduct.getText());
+//        // execute query
+//        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
+//
+//        // clear input boxes
+//        inputNameProduct.setText("");
+//        inputUnitaryValueProduct.setText("");
+//        inputQualityProduct.setText("");
     }
 
     public int MyOptionPane() {
@@ -236,6 +262,9 @@ public class CreateBill extends javax.swing.JFrame {
         float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText().trim());
         int quantity = Integer.parseInt(inputQualityProduct.getText().trim());
 
+        // agregar producto a la lista de productos que se pasa al generar la bill
+        qualityProducts.add(new Product(name, unitValue, quantity));
+        
 // Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
         ContainerProductEspesification panel = new ContainerProductEspesification(name, unitValue, quantity);
 
