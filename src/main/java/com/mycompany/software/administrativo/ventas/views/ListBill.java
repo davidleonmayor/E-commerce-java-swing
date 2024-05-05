@@ -56,23 +56,37 @@ public class ListBill extends javax.swing.JFrame {
 
                             // Ahora puedes usar el objeto billSpecification para acceder a los datos de la factura
                             if (billSpecification != null) {
-                                String billDetails = "Factura ID: " + billSpecification.getId()
-                                        + "\nCliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName()
+                                String billDetails = /* "Factura ID: " + billSpecification.getId() 
+                                        + */ "\nCliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName()
                                         + "\nVendedor: " + billSpecification.getSellerName() + " " + billSpecification.getSellerLastName()
                                         + "\nNúmero de Caja: " + billSpecification.getBoxNumber()
                                         + "\nFecha: " + billSpecification.getFecha()
                                         + "\nHora: " + billSpecification.getHora()
-                                        + "\nProductos:\n";
+                                        /* + "\nProductos:\n" */;
 
                                 for (Product product : billSpecification.getProducts()) {
-                                    billDetails += "  - " + product.getProductName()
-                                            + ", Valor unitario: " + product.getUnitValue()
-                                            + ", Cantidad: " + product.getQuantity() + "\n";
+//                                    billDetails += "  - " + product.getProductName()
+//                                            + ", Valor unitario: " + product.getUnitValue()
+//                                            + ", Cantidad: " + product.getQuantity() + "\n";
+
+                                    // Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
+                                    ContainerProductEspesification panel = new ContainerProductEspesification(product.getProductName(), product.getUnitValue(), product.getQuantity());
+
+                                    // Agrega el panel a jPanel3
+//                                    jPanel3.add(panel);
+                                      productsBillSpecification.add(panel);
+
+                                    // Actualiza jPanel3 para mostrar el nuevo panel
+//                                    jPanel3.revalidate();
+//                                    jPanel3.repaint();
+                                    productsBillSpecification.revalidate();
+                                    productsBillSpecification.repaint();
+
                                 }
 
-                                billDetails += "Método de pago: " + billSpecification.getPaymentMethod()
-                                        + "\n--------------------";
-                                productsBill.setText(billDetails);
+                                billDetails += "Método de pago: " + billSpecification.getPaymentMethod();
+                                noSeNombre.setText(billDetails);
+//                                productsBillSpecification.setText(billDetails);
                             } else {
                                 System.out.println("No se encontró ninguna factura con el ID: " + idBill);
                             }
@@ -168,7 +182,9 @@ public class ListBill extends javax.swing.JFrame {
         inputIDBill = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         containerContentBillSelected = new javax.swing.JPanel();
-        productsBill = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        productsBillSpecification = new javax.swing.JPanel();
+        noSeNombre = new javax.swing.JLabel();
         containerShowBills = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableShowIDBills = new javax.swing.JTable();
@@ -197,7 +213,7 @@ public class ListBill extends javax.swing.JFrame {
                     .addComponent(inputIDBill, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(64, 64, 64)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(340, Short.MAX_VALUE))
         );
         containerFilterVarLayout.setVerticalGroup(
             containerFilterVarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,22 +227,31 @@ public class ListBill extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        productsBill.setText("aqui irea la informacion de cada bill");
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        productsBillSpecification.setLayout(new javax.swing.BoxLayout(productsBillSpecification, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane2.setViewportView(productsBillSpecification);
+
+        noSeNombre.setText("jLabel1");
 
         javax.swing.GroupLayout containerContentBillSelectedLayout = new javax.swing.GroupLayout(containerContentBillSelected);
         containerContentBillSelected.setLayout(containerContentBillSelectedLayout);
         containerContentBillSelectedLayout.setHorizontalGroup(
             containerContentBillSelectedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerContentBillSelectedLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(productsBill, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(26, 26, 26)
+                .addGroup(containerContentBillSelectedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2)
+                    .addComponent(noSeNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         containerContentBillSelectedLayout.setVerticalGroup(
             containerContentBillSelectedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerContentBillSelectedLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(productsBill, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(noSeNombre)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -237,7 +262,7 @@ public class ListBill extends javax.swing.JFrame {
                 {null}
             },
             new String [] {
-                "identificadir factura"
+                "identificador de factura"
             }
         ) {
             Class[] types = new Class [] {
@@ -262,8 +287,8 @@ public class ListBill extends javax.swing.JFrame {
         containerShowBillsLayout.setHorizontalGroup(
             containerShowBillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerShowBillsLayout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
         containerShowBillsLayout.setVerticalGroup(
@@ -278,7 +303,7 @@ public class ListBill extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(containerContentBillSelected, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(containerContentBillSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(containerShowBills, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -382,7 +407,9 @@ public class ListBill extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel productsBill;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel noSeNombre;
+    private javax.swing.JPanel productsBillSpecification;
     private javax.swing.JTable tableShowIDBills;
     // End of variables declaration//GEN-END:variables
 }
