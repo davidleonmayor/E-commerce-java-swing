@@ -2,10 +2,12 @@ package com.mycompany.software.administrativo.ventas.tools;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 public class BillSpecification {
-
-    public BillSpecification(int id, Date fecha, Time hora, String clientName, String clientLastName, String sellerName, String sellerLastName, int boxNumber, String paymentMethod, String productName, int unitValue, int quantity) {
+    private List<Product> products;
+    
+    public BillSpecification(int id, Date fecha, Time hora, String clientName, String clientLastName, String sellerName, String sellerLastName, int boxNumber, String paymentMethod) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
@@ -15,14 +17,21 @@ public class BillSpecification {
         this.sellerLastName = sellerLastName;
         this.boxNumber = boxNumber;
         this.paymentMethod = paymentMethod;
-        this.productName = productName;
-        this.unitValue = unitValue;
-        this.quantity = quantity;
+//        this.productName = productName;
+//        this.unitValue = unitValue;
+//        this.quantity = quantity;
     }
 
-    public BillSpecification() {
+    public BillSpecification() {}
+    
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+    
     public int getId() {
         return id;
     }
@@ -59,17 +68,17 @@ public class BillSpecification {
         return paymentMethod;
     }
 
-    public String getProductName() {
-        return productName;
-    }
+//    public String getProductName() {
+//        return productName;
+//    }
 
-    public int getUnitValue() {
-        return unitValue;
-    }
+//    public int getUnitValue() {
+//        return unitValue;
+//    }
 
-    public int getQuantity() {
-        return quantity;
-    }
+//    public int getQuantity() {
+//        return quantity;
+//    }
 
     public void setId(int id) {
         this.id = id;
@@ -107,17 +116,17 @@ public class BillSpecification {
         this.paymentMethod = paymentMethod;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+//    public void setProductName(String productName) {
+//        this.productName = productName;
+//    }
 
-    public void setUnitValue(int unitValue) {
-        this.unitValue = unitValue;
-    }
+//    public void setUnitValue(int unitValue) {
+//        this.unitValue = unitValue;
+//    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+//    public void setQuantity(int quantity) {
+//        this.quantity = quantity;
+//    }
 
     private int id;
     private Date fecha;
@@ -128,7 +137,7 @@ public class BillSpecification {
     private String sellerLastName;
     private int boxNumber;
     private String paymentMethod;
-    private String productName;
-    private int unitValue;
-    private int quantity;
+//    private String productName;
+//    private int unitValue;
+//    private int quantity;
 }

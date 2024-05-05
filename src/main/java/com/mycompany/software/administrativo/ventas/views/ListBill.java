@@ -37,24 +37,24 @@ public class ListBill extends javax.swing.JFrame {
     public ListBill() {
         initComponents();
 
-        // evento to ejecute function when some on elemento of jTable is clicked
+// evento to ejecutar función cuando se hace clic en un elemento de jTable
         tableShowIDBills.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
                     if (row != -1) {
-                        // Obtiene el ID de la factura de la fila seleccionada
+                        // Obtener el ID de la factura de la fila seleccionada
                         int idBill = (Integer) target.getValueAt(row, 0);
 
-                        // Recupera los detalles de la factura
+                        // Recuperar los detalles de la factura
                         ConnectionDB connectionDB = new ConnectionDB();
                         BillSpecification billSpecification = null;
                         try {
                             billSpecification = connectionDB.getBill(idBill);
                             System.out.println("--------here is working the getBill method--------");
 
-// Ahora puedes usar el objeto billSpecification para acceder a los datos de la factura
+                            // Ahora puedes usar el objeto billSpecification para acceder a los datos de la factura
                             if (billSpecification != null) {
                                 String billDetails = "Factura ID: " + billSpecification.getId()
                                         + "\nCliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName()
@@ -62,10 +62,15 @@ public class ListBill extends javax.swing.JFrame {
                                         + "\nNúmero de Caja: " + billSpecification.getBoxNumber()
                                         + "\nFecha: " + billSpecification.getFecha()
                                         + "\nHora: " + billSpecification.getHora()
-                                        + "\nProducto: " + billSpecification.getProductName()
-                                        + ", Valor unitario: " + billSpecification.getUnitValue()
-                                        + ", Cantidad: " + billSpecification.getQuantity()
-                                        + ", Método de pago: " + billSpecification.getPaymentMethod()
+                                        + "\nProductos:\n";
+
+                                for (Product product : billSpecification.getProducts()) {
+                                    billDetails += "  - " + product.getProductName()
+                                            + ", Valor unitario: " + product.getUnitValue()
+                                            + ", Cantidad: " + product.getQuantity() + "\n";
+                                }
+
+                                billDetails += "Método de pago: " + billSpecification.getPaymentMethod()
                                         + "\n--------------------";
                                 productsBill.setText(billDetails);
                             } else {
@@ -75,19 +80,6 @@ public class ListBill extends javax.swing.JFrame {
                             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
                             ex.printStackTrace();
                         }
-
-//                if (billSpecification != null) {
-//                    // Crea una nueva instancia de tu panel con los detalles de la factura
-//                    // Asegúrate de tener un constructor en tu panel que tome un objeto BillSpecification como parámetro
-//                    YourPanel panel = new YourPanel(billSpecification);
-//
-//                    // Agrega el panel a tu interfaz de usuario
-//                    // Esto dependerá de cómo esté estructurada tu interfaz de usuario
-//                    // Aquí hay un ejemplo genérico
-//                    yourFrame.add(panel);
-//                    yourFrame.revalidate();
-//                    yourFrame.repaint();
-//                }
                     }
                 }
             }
