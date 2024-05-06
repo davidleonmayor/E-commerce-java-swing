@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 public class Client extends javax.swing.JPanel {
 
@@ -42,6 +43,22 @@ public class Client extends javax.swing.JPanel {
                                 System.out.println("Apellidos: " + cli.getLastNames());
                                 System.out.println("-------------------------");
                             }
+
+                            // dibujar los datos en la tabla
+                            // Crea un modelo de tabla y añade las IDs de las facturas
+                            DefaultTableModel model = new DefaultTableModel();
+                            model.addColumn("Documento");
+                            model.addColumn("Nombres");
+                            model.addColumn("Apellidos");
+                            for (ClientModel cli : clients) {
+//                                cli.getId());
+                                model.addRow(new Object[]{cli.getId(), cli.getDocument(), cli.getLastNames()});
+//                                model.addRow(new Object[]{});
+//                                model.addRow(new Object[]{});
+                            }
+
+                            // Establece el modelo en la tabla
+                            tableViewUserData.setModel(model);
                         }
                     }
                 }
@@ -64,7 +81,7 @@ public class Client extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableViewUserData = new javax.swing.JTable();
         searchVarUsers = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(737, 489));
@@ -99,18 +116,33 @@ public class Client extends javax.swing.JPanel {
                 .addGap(120, 120, 120))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableViewUserData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Documento", "Nombres", "Apellidos"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableViewUserData);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -177,7 +209,7 @@ public class Client extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField searchVarUsers;
+    private javax.swing.JTable tableViewUserData;
     // End of variables declaration//GEN-END:variables
 }
