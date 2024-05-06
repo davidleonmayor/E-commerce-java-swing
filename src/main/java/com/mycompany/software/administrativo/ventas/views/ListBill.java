@@ -1,28 +1,26 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.database.BillQuery;
 import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
-import com.mycompany.software.administrativo.ventas.tools.Bill;
 import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
+import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -37,6 +35,10 @@ public class ListBill extends javax.swing.JFrame {
     public ListBill() {
         initComponents();
 
+//        GUI styles
+        containerContentBillSelected.setLayout(new BorderLayout());
+        containerContentBillSelected.add(new JScrollPane(tableShowIDBills), BorderLayout.EAST);
+
 // evento to ejecutar función cuando se hace clic en un elemento de jTable
         tableShowIDBills.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -44,6 +46,10 @@ public class ListBill extends javax.swing.JFrame {
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
                     if (row != -1) {
+                        // cliar bill content to draw the new bill selected
+                        noSeNombre.setText("");
+                        productsBillSpecification.removeAll();
+
                         // Obtener el ID de la factura de la fila seleccionada
                         int idBill = (Integer) target.getValueAt(row, 0);
 
@@ -57,36 +63,22 @@ public class ListBill extends javax.swing.JFrame {
                             // Ahora puedes usar el objeto billSpecification para acceder a los datos de la factura
                             if (billSpecification != null) {
                                 String billDetails = /* "Factura ID: " + billSpecification.getId() 
-                                        + */ "\nCliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName()
+                                    + */ "\nCliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName()
                                         + "\nVendedor: " + billSpecification.getSellerName() + " " + billSpecification.getSellerLastName()
                                         + "\nNúmero de Caja: " + billSpecification.getBoxNumber()
                                         + "\nFecha: " + billSpecification.getFecha()
-                                        + "\nHora: " + billSpecification.getHora()
-                                        /* + "\nProductos:\n" */;
+                                        + "\nHora: " + billSpecification.getHora() /* + "\nProductos:\n" */;
 
                                 for (Product product : billSpecification.getProducts()) {
-//                                    billDetails += "  - " + product.getProductName()
-//                                            + ", Valor unitario: " + product.getUnitValue()
-//                                            + ", Cantidad: " + product.getQuantity() + "\n";
-
                                     // Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
                                     ContainerProductEspesification panel = new ContainerProductEspesification(product.getProductName(), product.getUnitValue(), product.getQuantity());
 
-                                    // Agrega el panel a jPanel3
-//                                    jPanel3.add(panel);
-                                      productsBillSpecification.add(panel);
-
-                                    // Actualiza jPanel3 para mostrar el nuevo panel
-//                                    jPanel3.revalidate();
-//                                    jPanel3.repaint();
-                                    productsBillSpecification.revalidate();
-                                    productsBillSpecification.repaint();
-
+                                    // Agrega el panel a productsBillSpecification
+                                    productsBillSpecification.add(panel);
                                 }
 
                                 billDetails += "Método de pago: " + billSpecification.getPaymentMethod();
                                 noSeNombre.setText(billDetails);
-//                                productsBillSpecification.setText(billDetails);
                             } else {
                                 System.out.println("No se encontró ninguna factura con el ID: " + idBill);
                             }
@@ -213,7 +205,7 @@ public class ListBill extends javax.swing.JFrame {
                     .addComponent(inputIDBill, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(64, 64, 64)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(340, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         containerFilterVarLayout.setVerticalGroup(
             containerFilterVarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,6 +247,8 @@ public class ListBill extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        containerShowBills.setLayout(new java.awt.BorderLayout());
+
         tableShowIDBills.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
@@ -282,41 +276,26 @@ public class ListBill extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableShowIDBills);
 
-        javax.swing.GroupLayout containerShowBillsLayout = new javax.swing.GroupLayout(containerShowBills);
-        containerShowBills.setLayout(containerShowBillsLayout);
-        containerShowBillsLayout.setHorizontalGroup(
-            containerShowBillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerShowBillsLayout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
-        );
-        containerShowBillsLayout.setVerticalGroup(
-            containerShowBillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerShowBillsLayout.createSequentialGroup()
-                .addGap(0, 12, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        containerShowBills.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(containerFilterVar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(containerContentBillSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(containerShowBills, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(containerFilterVar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(containerShowBills, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(containerFilterVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(containerContentBillSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(containerShowBills, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(containerShowBills, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

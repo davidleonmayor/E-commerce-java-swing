@@ -1,5 +1,20 @@
 package com.mycompany.software.administrativo.ventas.database;
 
+/* query to select all bills with his own content
+SELECT b.id_bill, b.fecha, b.hora,
+    c.names AS client_name, c.last_names AS client_last_name,
+    s.names AS seller_name, s.last_names AS seller_last_name,
+    -- x.box_number, bd.payment_method,
+    p.product_name, p.unit_value, p.quantity
+    FROM bills b
+    JOIN clients c ON b.id_bill_client = c.id_client
+    JOIN sellers s ON b.id_bill_seller = s.id_seller
+    -- JOIN boxes x ON b.id_bill_box = x.id_box
+    JOIN bill_details bd ON b.id_bill = bd.id_bill
+    JOIN products p ON bd.id_bill_detail = p.id_bill_details_product
+    ORDER BY b.id_bill, bd.id_bill_detail;
+*/
+
 import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
 import com.mycompany.software.administrativo.ventas.tools.Product;
 import java.util.List;
