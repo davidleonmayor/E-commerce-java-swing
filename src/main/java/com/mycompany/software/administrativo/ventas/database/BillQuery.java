@@ -15,7 +15,6 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 public class BillQuery extends ConnectionDB {
-
     private final Statement statement;
     private ResultSet resultSet;
 

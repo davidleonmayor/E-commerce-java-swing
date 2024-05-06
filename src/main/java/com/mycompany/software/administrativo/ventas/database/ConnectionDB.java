@@ -38,7 +38,7 @@ public class ConnectionDB {
     private String url = "jdbc:mysql://localhost:3306/" + nameDatabase + "?allowMultiQueries=true";
 
     protected Connection con;
-    private Statement stmt;
+    protected Statement stmt;
     private ResultSet rs;
 
     public ConnectionDB() {
@@ -183,7 +183,6 @@ public class ConnectionDB {
 
     public void deleteBill(int idBill) {
         try {
-
             stmt.executeUpdate("DELETE FROM `products` WHERE `id_bill_details_product` = " + idBill);
             //
             stmt.executeUpdate("DELETE FROM `bill_details` WHERE `id_bill` = " + idBill);
