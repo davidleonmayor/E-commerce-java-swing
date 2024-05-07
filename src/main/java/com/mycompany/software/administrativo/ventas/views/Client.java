@@ -1,25 +1,51 @@
 package com.mycompany.software.administrativo.ventas.views;
 
 import com.mycompany.software.administrativo.ventas.database.ClientQuery;
+import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.ClientModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import javax.swing.JOptionPane;
 
 public class Client extends javax.swing.JPanel {
 
     private String documentDigits = "";
+    private int documentInput;
 
     public Client() {
         initComponents();
 
-        searchVarUsers.addKeyListener(new KeyAdapter() {
+        // This event is executed when a key is pressed
+        tableViewUserData.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    // an element of jTable is clicked?
+                    if (row != -1) {
+                        // Obtener el ID de la factura de la fila seleccionada
+                        documentInput = (Integer) target.getValueAt(row, 0);
+                        System.out.println("numero de comunento en la fila que se oprimio: " + documentInput);
+                    }
+                }
+            }
+        });
+
+        // This event is executed when a key is pressed
+        searchVarUsers.addKeyListener(
+                new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyTyped(KeyEvent e
+            ) {
                 char c = e.getKeyChar();
                 if (Character.isDigit(c)) {
                     // Concatenar el dígito a la cadena existente
@@ -52,7 +78,7 @@ public class Client extends javax.swing.JPanel {
                             model.addColumn("Apellidos");
                             for (ClientModel cli : clients) {
 //                                cli.getId());
-                                model.addRow(new Object[]{cli.getId(), cli.getDocument(), cli.getLastNames()});
+                                model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
 //                                model.addRow(new Object[]{});
 //                                model.addRow(new Object[]{});
                             }
@@ -63,7 +89,8 @@ public class Client extends javax.swing.JPanel {
                     }
                 }
             }
-        });
+        }
+        );
     }
 
     /**
@@ -78,7 +105,6 @@ public class Client extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableViewUserData = new javax.swing.JTable();
@@ -86,34 +112,28 @@ public class Client extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(737, 489));
 
-        jButton2.setText("Delete");
+        jButton2.setText("Eliminar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Update");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(346, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
-                .addGap(120, 120, 120))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(115, 115, 115))
         );
 
         tableViewUserData.setModel(new javax.swing.table.DefaultTableModel(
@@ -161,7 +181,7 @@ public class Client extends javax.swing.JPanel {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addComponent(searchVarUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,15 +216,18 @@ public class Client extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-// falta tomar el documento que el usuario selecciono el la jTable  
-//        ClientQuery clientQuery = new ClientQuery();
-//        clientQuery.remove();
+        // verificar su eliminacion
+        int replyConfirmRemove = JOptionPane.showConfirmDialog(null, "estas seguro de eliminarlo", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (replyConfirmRemove == JOptionPane.OK_OPTION) {
+            System.out.println("si");
+            ClientQuery clientQuery = new ClientQuery();
+            clientQuery.remove(documentInput);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

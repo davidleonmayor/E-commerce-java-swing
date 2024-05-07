@@ -39,7 +39,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Component id="containerContentBillSelected" pref="561" max="32767" attributes="0"/>
+                  <Component id="containerContentBillSelected" max="32767" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="containerShowBills" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -53,7 +53,7 @@
                   <Component id="containerFilterVar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="containerContentBillSelected" pref="439" max="32767" attributes="0"/>
+                      <Component id="containerContentBillSelected" max="32767" attributes="0"/>
                       <Component id="containerShowBills" max="32767" attributes="0"/>
                   </Group>
               </Group>

@@ -72,7 +72,6 @@ public class ListBill extends javax.swing.JFrame {
                                 for (Product product : billSpecification.getProducts()) {
                                     // Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
                                     ContainerProductEspesification panel = new ContainerProductEspesification(product.getProductName(), product.getUnitValue(), product.getQuantity());
-
                                     // Agrega el panel a productsBillSpecification
                                     productsBillSpecification.add(panel);
                                 }
