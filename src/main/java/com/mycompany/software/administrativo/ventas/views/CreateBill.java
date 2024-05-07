@@ -1,24 +1,126 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.tools.ProductSpecification;
+import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.tools.Product;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
-import java.awt.Component;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.UIManager;
 
+// TODO:
+// 1) Manage and check data input user
+// 2) Sendd to data base, related each input with jis own
 public class CreateBill extends javax.swing.JFrame {
 
-    private ArrayList<ProductSpecification> qualityProducts = new ArrayList<ProductSpecification>();
+    private List<Product> qualityProducts = new ArrayList<>();
 
     public CreateBill() {
         initComponents();
     }
 
     private void setItemInQualityProducts(String name, float unitValue, int quantity) {
-//        ProductSpecification product = new ProductSpecification(name, unitValue, quantity);
-//        qualityProducts.add(product.getName(), product.getUnitValue(), product.getQuantity());
-        qualityProducts.add(new ProductSpecification(name, unitValue, quantity));
+        qualityProducts.add(new Product(name, unitValue, quantity));
+    }
+
+    private /*public static*/ String getCurrentDate() {
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return currentDate.format(formatter);
+    }
+
+    private /*public static*/ String getCurrentTime() {
+        LocalTime currentTime = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return currentTime.format(formatter);
+    }
+
+    private void finalizeBill() throws SQLException {
+            // input data user
+    int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+    int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+    int buyOptionSelected = this.MyOptionPane();
+    // initialize the SQL query
+    ConnectionDB connectionDB = new ConnectionDB();
+    int idBillClientDefult = 1;
+    int idBillSellerDefult = 2;
+    int idBillBoxDefult = 2;
+    String currentDate = this.getCurrentDate();
+    String currentTime = this.getCurrentTime();
+    String paymentMethod = "1";
+
+    // execute query
+    connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
+
+    // clear input boxes
+    inputNameProduct.setText("");
+    inputUnitaryValueProduct.setText("");
+    inputQualityProduct.setText("");
+    
+    
+    // ------------- code pass method -------------
+        
+        
+//        // input data user
+//        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+//        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+//        int buyOptionSelected = this.MyOptionPane();
+//        // initialize the SQL query
+//        ConnectionDB connectionDB = new ConnectionDB();
+//        int idBillClientDefult = 1;
+//        int idBillSellerDefult = 2;
+//        int idBillBoxDefult = 2;
+//        String currentDate = this.getCurrentDate();
+//        String currentTime = this.getCurrentTime();
+//        String paymentMethod = "1";
+//        String nameProduct = inputNameProduct.getText();
+//        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
+//        int quality = Integer.parseInt(inputQualityProduct.getText());
+//        // execute query
+//        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
+//
+//        // clear input boxes
+//        inputNameProduct.setText("");
+//        inputUnitaryValueProduct.setText("");
+//        inputQualityProduct.setText("");
+    }
+
+    public int MyOptionPane() {
+        Icon errorIcon = UIManager.getIcon("OptionPane.errorIcon");
+        Object[] possibilities = {"debit card", "credit card", "cash", "checks"};
+        String selectedOption = (String) JOptionPane.showInputDialog(null,
+                "Seleccina el metodo de pago: ", "ShowInputDialog",
+                JOptionPane.PLAIN_MESSAGE, errorIcon, possibilities, "Numbers");
+
+        int paymentMethod;
+        switch (selectedOption) {
+            case "debit card":
+                paymentMethod = 1;
+                break;
+            case "credit card":
+                paymentMethod = 2;
+                break;
+            case "cash":
+                paymentMethod = 3;
+                break;
+            case "checks":
+                paymentMethod = 4;
+                break;
+            default:
+                paymentMethod = -1; // Valor por defecto en caso de que no se seleccione ninguna opción
+                break;
+        }
+
+        System.out.println(paymentMethod);
+        return paymentMethod;
     }
 
     @SuppressWarnings("unchecked")
@@ -33,9 +135,9 @@ public class CreateBill extends javax.swing.JFrame {
         inputUnitaryValueProduct = new javax.swing.JTextField();
         inputQualityProduct = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         scrollProductsPane = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
 
@@ -43,23 +145,23 @@ public class CreateBill extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setText("Name");
+        jLabel2.setText("Nombre Producto");
 
-        jLabel3.setText("Unit Value");
+        jLabel3.setText("Valor Unitario");
 
-        jLabel4.setText("Quality");
-
-        jButton1.setText("Add Product");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jLabel4.setText("Cantidad");
 
         jButton2.setText("Done Bill ");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Agregar Producto");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -71,20 +173,18 @@ public class CreateBill extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(30, 30, 30)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(inputNameProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
                             .addComponent(inputUnitaryValueProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(inputQualityProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel4)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -102,8 +202,8 @@ public class CreateBill extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputQualityProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -114,18 +214,7 @@ public class CreateBill extends javax.swing.JFrame {
         scrollProductsPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 605, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
-        );
-
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
         scrollProductsPane.setViewportView(jPanel3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -135,12 +224,12 @@ public class CreateBill extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollProductsPane))
+                .addComponent(scrollProductsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(scrollProductsPane, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(scrollProductsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -158,61 +247,38 @@ public class CreateBill extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        for (ProductSpecification product : qualityProducts) {
-            // Imprimir los detalles del producto en la consola
-            System.out.println("Name: " + product.getName());
-            System.out.println("Unit Value: " + product.getUnitValue());
-            System.out.println("Quality: " + product.getQuantity());
-            System.out.println();
+        try {
+            this.finalizeBill();
+            // insertBill();
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateBill.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        // Obtener el contenedor del scrollProductsPane
-//        JPanel innerPanel = (JPanel) scrollProductsPane.getViewport().getView();
-//
-//        // Recorrer todos los componentes en el panel interno
-//        for (Component component : innerPanel.getComponents()) {
-//            // Verificar si el componente es una instancia de ContainerProductEspesification
-//            if (component instanceof ContainerProductEspesification) {
-//                ContainerProductEspesification product = (ContainerProductEspesification) component;
-//
-//                // Imprimir los detalles del producto en la consola
-//                System.out.println("Name: " + product.getName());
-////                System.out.println("Unit Value: " + product.getUnitValue());
-////                System.out.println("Quality: " + product.getQuality());
-//                System.out.println();
-//            }
-//        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // Obtener valores de los campos de texto
-            String name = inputNameProduct.getText();
-            float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
-            int quality = Integer.parseInt(inputQualityProduct.getText());
-            System.out.println("name: " + name + ", unitValue: " + unitValue + ", quality: " + quality);
-            // add element to list
-            setItemInQualityProducts(name, unitValue, quality);
+        // TODO add your handling code here:
+        // Obtiene los valores de los campos de entrada
+        String name = inputNameProduct.getText().trim();
+        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText().trim());
+        int quantity = Integer.parseInt(inputQualityProduct.getText().trim());
 
-            // Crear una nueva instancia de ContainerProductEspesification
-            ContainerProductEspesification containerProductEspesification = new ContainerProductEspesification(name, unitValue, quality);
-            containerProductEspesification.setSize(750, 430);
-            containerProductEspesification.setLocation(0, 0);
+        // agregar producto a la lista de productos que se pasa al generar la bill
+        qualityProducts.add(new Product(name, unitValue, quantity));
+        
+// Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
+        ContainerProductEspesification panel = new ContainerProductEspesification(name, unitValue, quantity);
 
-            // Obtener el contenedor del scrollProductsPane
-            JPanel innerPanel = (JPanel) scrollProductsPane.getViewport().getView();
+        // Agrega el panel a jPanel3
+        jPanel3.add(panel);
 
-            // Configurar el layout del panel para que los componentes se agreguen uno debajo del otro
-            innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.PAGE_AXIS));
+        // Actualiza jPanel3 para mostrar el nuevo panel
+        jPanel3.revalidate();
+        jPanel3.repaint();
 
-            // Agregar el nuevo producto al contenedor
-            innerPanel.add(containerProductEspesification);
-
-            // Revalidar y repintar el contenedor para que se muestre el nuevo producto
-            innerPanel.revalidate();
-            innerPanel.repaint();
-        } catch (NumberFormatException e) {
-            System.err.println("Error en la entrada de datos numéricos: " + e.getMessage());
-        }
+        // Limpia los campos de entrada para la próxima entrada
+        inputNameProduct.setText("");
+        inputUnitaryValueProduct.setText("");
+        inputQualityProduct.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

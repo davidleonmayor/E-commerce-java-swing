@@ -1,18 +1,17 @@
 package com.mycompany.software.administrativo.ventas.tools;
 
-public class ProductSpecification {
+public class Product {
     private String name;
     private float unitValue;
     private int quantity;
 
-    public ProductSpecification(String name, float unitValue, int quantity) {
+    public Product(String name, float unitValue, int quantity) {
         this.name = name;
         this.unitValue = unitValue;
         this.quantity = quantity;
-        
     }
-
-    public String getName() {
+    
+    public String getProductName() {
         return name;
     }
 
