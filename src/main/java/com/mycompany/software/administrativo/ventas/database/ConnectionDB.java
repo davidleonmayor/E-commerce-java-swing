@@ -13,8 +13,7 @@ SELECT b.id_bill, b.fecha, b.hora,
     JOIN bill_details bd ON b.id_bill = bd.id_bill
     JOIN products p ON bd.id_bill_detail = p.id_bill_details_product
     ORDER BY b.id_bill, bd.id_bill_detail;
-*/
-
+ */
 import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
 import com.mycompany.software.administrativo.ventas.tools.Product;
 import java.util.List;
@@ -39,7 +38,7 @@ public class ConnectionDB {
 
     protected Connection con;
     protected Statement stmt;
-    private ResultSet rs;
+    protected ResultSet rs;
 
     public ConnectionDB() {
         try {
@@ -49,6 +48,22 @@ public class ConnectionDB {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
+        }
+    }
+
+    public void close() {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
