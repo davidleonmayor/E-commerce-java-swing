@@ -9,27 +9,10 @@
 package com.mycompany.software.administrativo.ventas;
 
 import com.mycompany.software.administrativo.ventas.views.Login;
-import com.mycompany.software.administrativo.ventas.database.ClientQuery;
-import java.sql.SQLException;
-
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 
 public class SoftwareAdministrativoVentas {
 
-    public static void main(String[] args) throws SQLException {
-        System.out.println("Hello World!");
-        new Dashboard().setVisible(true);
-        
+    public static void main(String[] args) {
         new Login().setVisible(true);
-
-//        ConnectionDB connectionDB = new ConnectionDB();
-//        //connectionDB.insertBill();
-//        ConnectionDB connectionDB = new ConnectionDB();
-//        connectionDB.deleteBill(1);
-
-
-// test client query 
-        ClientQuery clientQuery = new ClientQuery();
-        clientQuery.remove(666666);
     }
 }

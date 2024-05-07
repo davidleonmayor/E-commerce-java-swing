@@ -3,10 +3,14 @@ package com.mycompany.software.administrativo.ventas.views;
 import com.mycompany.software.administrativo.ventas.database.loginQuery;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -155,12 +159,16 @@ public class Login extends javax.swing.JFrame {
         if (range.equals("Gerente")) {
             if (loginQuery.checkIfManagerExist(document, password)) {
                 System.out.println("exite");
+                try {
+                    new Dashboard().setVisible(true);
+                    this.setVisible(false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-
         } else if (range.equals("Trabajador")) {
-            // check in seller table
+            JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

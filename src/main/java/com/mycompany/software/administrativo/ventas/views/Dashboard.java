@@ -1,16 +1,11 @@
 // TODO: add icons in var menu
 
-package com.mycompany.software.administrativo.ventas;
+package com.mycompany.software.administrativo.ventas.views;
 
-
-import com.mycompany.software.administrativo.ventas.views.Client;
-import com.mycompany.software.administrativo.ventas.views.OptionCrudBill;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import javax.swing.UIManager;
-import com.mycompany.software.administrativo.ventas.views.Saller;
 import java.awt.BorderLayout;
-
 
 import com.mycompany.software.administrativo.ventas.database.BillQuery;
 import java.sql.SQLException;
@@ -25,19 +20,19 @@ public class Dashboard extends javax.swing.JFrame {
         initContent();
     }
     
-    private void initStyles() throws SQLException {
+    private void initStyles() {
         menssajeHeader.putClientProperty( "FlatLaf.style", "font: 200% $light.font" );
         menssajeHeader.setForeground(Color.BLACK);
         
         titleMenu.putClientProperty( "FlatLaf.style", "font: 300% $light.font" );
+    }
+    
+    private void initContent() throws SQLException {
+        this.openOptionCrudBillPane();
         
         // print databse bills contet 
         BillQuery billQuery = new BillQuery();
         billQuery.all();
-    }
-    
-    private void initContent() {
-        this.openOptionCrudBillPane();
     }
 
     private void openOptionCrudBillPane () {
