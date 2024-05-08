@@ -1,13 +1,67 @@
-// TODO: change class name to Bill
 package com.mycompany.software.administrativo.ventas.views;
+
+import com.mycompany.software.administrativo.ventas.database.SellerQuery;
+import com.mycompany.software.administrativo.ventas.tools.SellerModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 public class Saller extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Saller
-     */
+    private String documentDigits = "";
+
     public Saller() {
         initComponents();
+
+        // This event is executed when a key is pressed to search this content in data base
+        searchVarSeller.addKeyListener(
+                new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e
+            ) {
+                char c = e.getKeyChar();
+                if (Character.isDigit(c)) {
+                    // Concatenar el dígito a la cadena existente
+                    documentDigits += c;
+
+                    // Ejecutar la búsqueda solo si la cadena no está vacía
+                    if (!documentDigits.isEmpty()) {
+                        // Ejecutar aquí lo que quieras hacer cuando se presione una tecla numérica
+                        System.out.println("Se presionó la tecla numérica: " + c);
+                        SellerQuery sellertQuery = new SellerQuery();
+                        List<SellerModel> sellers = sellertQuery.getByDocument(Integer.parseInt(documentDigits));
+
+                        if (sellers.isEmpty()) {
+                            System.out.println("No se encontraron clientes con el documento: " + documentDigits);
+                        } else {
+                            System.out.println("Vendedorres encontrados con el documento: " + documentDigits);
+                            for (SellerModel cli : sellers) {
+                                System.out.println("ID seller: " + cli.getId());
+                                System.out.println("Documento seller: " + cli.getDocument());
+                                System.out.println("Nombres seller: " + cli.getNames());
+                                System.out.println("Apellidos seller: " + cli.getLastNames());
+                                System.out.println("-------------------------");
+                            }
+
+// dibujar los datos en la tabla
+// Crea un modelo de tabla y añade las IDs de las facturas
+                            DefaultTableModel model = new DefaultTableModel();
+                            model.addColumn("Documento");
+                            model.addColumn("Nombres");
+                            model.addColumn("Apellidos");
+                            for (SellerModel cli : sellers) {
+                                model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
+                            }
+
+                            // Establece el modelo en la tabla
+                            tableViewSellerData.setModel(model);
+                        }
+                    }
+                }
+            }
+        }
+        );
     }
 
     /**
@@ -31,8 +85,8 @@ public class Saller extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        tableViewSellerData = new javax.swing.JTable();
+        searchVarSeller = new javax.swing.JTextField();
 
         jButton1.setText("Create");
 
@@ -94,41 +148,51 @@ public class Saller extends javax.swing.JPanel {
                 .addContainerGap(70, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableViewSellerData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Documento", "Nombres", "Apellidos"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
-        jLabel1.setText("Barra parra listar y filtrar trabajadores");
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableViewSellerData);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(jLabel1)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchVarSeller, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(searchVarSeller, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -168,7 +232,6 @@ public class Saller extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -176,9 +239,10 @@ public class Saller extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField searchVarSeller;
+    private javax.swing.JTable tableViewSellerData;
     // End of variables declaration//GEN-END:variables
 }

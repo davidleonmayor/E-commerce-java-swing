@@ -24,7 +24,7 @@ public class Client extends javax.swing.JPanel {
     public Client() {
         initComponents();
 
-        // This event is executed when a key is pressed
+        // This event is check if jTable row is clicked
         tableViewUserData.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
@@ -40,7 +40,7 @@ public class Client extends javax.swing.JPanel {
             }
         });
 
-        // This event is executed when a key is pressed
+        // This event is executed when a key is pressed to search this content in data base
         searchVarUsers.addKeyListener(
                 new KeyAdapter() {
             @Override
