@@ -165,9 +165,23 @@ public class Login extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
             }
+
         } else if (range.equals("Trabajador")) {
-            JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
+            if (loginQuery.checkIfSellerExist(document, password)) {
+                System.out.println("exite");
+                try {
+                    new Dashboard().setVisible(true);
+                    this.setVisible(false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+
+                JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
