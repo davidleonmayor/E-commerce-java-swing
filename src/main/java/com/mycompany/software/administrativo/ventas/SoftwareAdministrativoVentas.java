@@ -5,7 +5,11 @@
 // 3) elimimar en el pane de cliente todo el CRUD.
 // Solo dejar que pueda listar y filtra los clientes qu existen, para que tenga centido con relacion al punto (1)
 // 4)  del vendedor 
-// TODO: agregar clase abstracta requerida, 
+// TODO: agregar clase abstracta requerida,
+
+// estructura presente continuo
+// pronombre + was/were(depende del pronombre) + verbo(ing) + complemento
+
 package com.mycompany.software.administrativo.ventas;
 
 import com.mycompany.software.administrativo.ventas.views.Login;
