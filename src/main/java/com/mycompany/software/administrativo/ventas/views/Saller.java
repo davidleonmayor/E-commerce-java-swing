@@ -1,15 +1,26 @@
 package com.mycompany.software.administrativo.ventas.views;
 
+import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.database.SellerQuery;
+import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
+import com.mycompany.software.administrativo.ventas.tools.Product;
 import com.mycompany.software.administrativo.ventas.tools.SellerModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class Saller extends javax.swing.JPanel {
 
     private String documentDigits = "";
+    private int documentTableSelected;
 
     public Saller() {
         initComponents();
@@ -17,51 +28,81 @@ public class Saller extends javax.swing.JPanel {
         // This event is executed when a key is pressed to search this content in data base
         searchVarSeller.addKeyListener(
                 new KeyAdapter() {
+
             @Override
             public void keyTyped(KeyEvent e
             ) {
+                // Verifica si la tecla presionada es DELETE
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    // Verifica que la cadena tenga al menos un caracter
+                    if (!documentDigits.isEmpty()) {
+                        // Elimina el último caracter de la cadena
+                        documentDigits = documentDigits.substring(0, documentDigits.length() - 1);
+                        System.out.println("Delete key pressed, new content is: " + documentDigits);
+                    }
+                }
+
                 char c = e.getKeyChar();
                 if (Character.isDigit(c)) {
-                    // Concatenar el dígito a la cadena existente
                     documentDigits += c;
 
                     // Ejecutar la búsqueda solo si la cadena no está vacía
                     if (!documentDigits.isEmpty()) {
                         // Ejecutar aquí lo que quieras hacer cuando se presione una tecla numérica
                         System.out.println("Se presionó la tecla numérica: " + c);
-                        SellerQuery sellertQuery = new SellerQuery();
-                        List<SellerModel> sellers = sellertQuery.getByDocument(Integer.parseInt(documentDigits));
+                        SellerQuery sellertQuery;;
+                        List<SellerModel> sellers;
+                        try {
+                            sellertQuery = new SellerQuery();
+                            sellers = sellertQuery.getByDocument(Integer.parseInt(documentDigits));
 
-                        if (sellers.isEmpty()) {
-                            System.out.println("No se encontraron clientes con el documento: " + documentDigits);
-                        } else {
-                            System.out.println("Vendedorres encontrados con el documento: " + documentDigits);
-                            for (SellerModel cli : sellers) {
-                                System.out.println("ID seller: " + cli.getId());
-                                System.out.println("Documento seller: " + cli.getDocument());
-                                System.out.println("Nombres seller: " + cli.getNames());
-                                System.out.println("Apellidos seller: " + cli.getLastNames());
-                                System.out.println("-------------------------");
-                            }
+                            if (sellers.isEmpty()) {
+                                System.out.println("No se encontraron clientes con el documento: " + documentDigits);
+                            } else {
+                                System.out.println("Vendedorres encontrados con el documento: " + documentDigits);
+                                for (SellerModel cli : sellers) {
+                                    System.out.println("ID seller: " + cli.getId());
+                                    System.out.println("Documento seller: " + cli.getDocument());
+                                    System.out.println("Nombres seller: " + cli.getNames());
+                                    System.out.println("Apellidos seller: " + cli.getLastNames());
+                                    System.out.println("-------------------------");
+                                }
 
 // dibujar los datos en la tabla
 // Crea un modelo de tabla y añade las IDs de las facturas
-                            DefaultTableModel model = new DefaultTableModel();
-                            model.addColumn("Documento");
-                            model.addColumn("Nombres");
-                            model.addColumn("Apellidos");
-                            for (SellerModel cli : sellers) {
-                                model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
-                            }
+                                DefaultTableModel model = new DefaultTableModel();
+                                model.addColumn("Documento");
+                                model.addColumn("Nombres");
+                                model.addColumn("Apellidos");
+                                for (SellerModel cli : sellers) {
+                                    model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
+                                }
 
-                            // Establece el modelo en la tabla
-                            tableViewSellerData.setModel(model);
+                                // Establece el modelo en la tabla
+                                tableViewSellerData.setModel(model);
+                            }
+                        } catch (SQLException err) {
+                            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, err);
+                            err.printStackTrace();
                         }
                     }
                 }
             }
-        }
-        );
+        });
+
+        // evento to ejecutar función cuando se hace clic en un elemento de jTable
+        tableViewSellerData.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    if (row != -1) {
+                        // Obtener el ID de la factura de la fila seleccionada
+                        documentTableSelected = (Integer) target.getValueAt(row, 0);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -88,9 +129,19 @@ public class Saller extends javax.swing.JPanel {
         tableViewSellerData = new javax.swing.JTable();
         searchVarSeller = new javax.swing.JTextField();
 
-        jButton1.setText("Create");
+        jButton1.setText("Crear");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Delete");
+        jButton2.setText("Eliminar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,14 +160,13 @@ public class Saller extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(35, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addGap(43, 43, 43))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -124,7 +174,7 @@ public class Saller extends javax.swing.JPanel {
                         .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,9 +193,9 @@ public class Saller extends javax.swing.JPanel {
                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(172, 172, 172)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(70, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         tableViewSellerData.setModel(new javax.swing.table.DefaultTableModel(
@@ -175,6 +225,12 @@ public class Saller extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tableViewSellerData);
+
+        searchVarSeller.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchVarSellerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -227,6 +283,25 @@ public class Saller extends javax.swing.JPanel {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        SellerQuery sellerQuery;
+        try {
+            sellerQuery = new SellerQuery();
+            sellerQuery.remove(documentTableSelected);
+        } catch (SQLException ex) {
+            Logger.getLogger(Saller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void searchVarSellerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchVarSellerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchVarSellerActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
