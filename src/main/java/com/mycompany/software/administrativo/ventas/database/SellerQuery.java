@@ -17,9 +17,14 @@ public class SellerQuery extends ConnectionDB {
         super();
     }
 
+    public void create(int document, int password_sellers, String names, String last_names) throws SQLException {
+        String query = "INSERT INTO `sellers` (`document`, `password_sellers`, `names`, `last_names`) VALUES (" + document + ", " + password_sellers + ", '" + names + "', '" + last_names + "')";
+        this.stmt.executeUpdate(query);
+    }
+
     public void remove(int document) {
         try {
-            this.stmt.executeUpdate(removeOneUserStadmend + document);
+            this.stmt.executeUpdate(removeOneSellerStadmend + document);
         } catch (SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,5 +55,5 @@ public class SellerQuery extends ConnectionDB {
         return clients;
     }
 
-    private String removeOneUserStadmend = "DELETE FROM `sellers` WHERE `document` = ";
+    private String removeOneSellerStadmend = "DELETE FROM `sellers` WHERE `document` = ";
 }
