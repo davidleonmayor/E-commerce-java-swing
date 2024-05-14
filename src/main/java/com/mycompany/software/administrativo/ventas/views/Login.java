@@ -160,7 +160,7 @@ public class Login extends javax.swing.JFrame {
             if (loginQuery.checkIfManagerExist(document, password)) {
                 System.out.println("exite");
                 try {
-                    new Dashboard().setVisible(true);
+                    new Dashboard(1).setVisible(true);
                     this.setVisible(false);
                 } catch (SQLException ex) {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,7 +173,7 @@ public class Login extends javax.swing.JFrame {
             if (loginQuery.checkIfSellerExist(document, password)) {
                 System.out.println("exite");
                 try {
-                    new Dashboard().setVisible(true);
+                    new Dashboard(2).setVisible(true);
                     this.setVisible(false);
                 } catch (SQLException ex) {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

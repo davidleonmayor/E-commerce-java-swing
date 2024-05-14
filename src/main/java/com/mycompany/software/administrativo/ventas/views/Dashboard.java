@@ -1,5 +1,4 @@
 // TODO: add icons in var menu
-
 package com.mycompany.software.administrativo.ventas.views;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -14,28 +13,39 @@ import java.util.logging.Logger;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    public Dashboard() throws SQLException {
-        initComponents();   
+    public Dashboard(int role) throws SQLException {
+        initComponents();
         initStyles();
         initContent();
+
+        switch (role) {
+            case 1:
+            break;
+            case 2:
+                jButton4.setVisible(false);
+            break;
+            default:
+                throw new AssertionError();
+        }
+
     }
-    
+
     private void initStyles() {
-        menssajeHeader.putClientProperty( "FlatLaf.style", "font: 200% $light.font" );
+        menssajeHeader.putClientProperty("FlatLaf.style", "font: 200% $light.font");
         menssajeHeader.setForeground(Color.BLACK);
-        
-        titleMenu.putClientProperty( "FlatLaf.style", "font: 300% $light.font" );
+
+        titleMenu.putClientProperty("FlatLaf.style", "font: 300% $light.font");
     }
-    
+
     private void initContent() throws SQLException {
         this.openOptionCrudBillPane();
-        
+
         // print databse bills contet 
 //        BillQuery billQuery = new BillQuery();
 //        billQuery.all();
     }
 
-    private void openOptionCrudBillPane () {
+    private void openOptionCrudBillPane() {
         OptionCrudBill OptionCrudBillPane = new OptionCrudBill();
         OptionCrudBillPane.setSize(750, 430);
         OptionCrudBillPane.setLocation(0, 0);
@@ -45,23 +55,23 @@ public class Dashboard extends javax.swing.JFrame {
         content.revalidate();
         content.repaint();
     }
-    
+
     private void openClientPane() {
         Client clientPane = new Client();
         clientPane.setSize(750, 430);
         clientPane.setLocation(0, 0);
-        
+
         content.removeAll();
         content.add(clientPane, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
     }
-    
+
     private void openSallerPane() {
         Saller sallerPane = new Saller();
         sallerPane.setSize(750, 430);
         sallerPane.setLocation(0, 0);
-        
+
         content.removeAll();
         content.add(sallerPane, BorderLayout.CENTER);
         content.revalidate();
@@ -236,21 +246,21 @@ public class Dashboard extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         // TODO: Look and feel don't work
         try {
-            UIManager.setLookAndFeel( new FlatLightLaf() );
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
         }
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new Dashboard().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                try {
+//                    new Dashboard(1).setVisible(true);
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

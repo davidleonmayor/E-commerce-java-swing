@@ -1,7 +1,7 @@
 package com.mycompany.software.administrativo.ventas.views;
 
 /* TODO: 
- 1) when delete button is clicked and confirm to remove the seller, update the table with his own data 
+ 1) when delete button is clicked and confirm to remove the seller, update the table with his own data :check
  2) make an event then changes the document input list matches 
  */
 import com.mycompany.software.administrativo.ventas.database.SellerQuery;
