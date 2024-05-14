@@ -31,8 +31,8 @@ public class Dashboard extends javax.swing.JFrame {
         this.openOptionCrudBillPane();
         
         // print databse bills contet 
-        BillQuery billQuery = new BillQuery();
-        billQuery.all();
+//        BillQuery billQuery = new BillQuery();
+//        billQuery.all();
     }
 
     private void openOptionCrudBillPane () {

@@ -8,6 +8,7 @@ import com.mycompany.software.administrativo.ventas.database.SellerQuery;
 import com.mycompany.software.administrativo.ventas.tools.SellerModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -29,19 +30,8 @@ public class Saller extends javax.swing.JPanel {
 
         // This event is executed when a key is pressed to search this content in data base
         searchVarSeller.addKeyListener(new KeyAdapter() {
-
             @Override
             public void keyTyped(KeyEvent e) {
-                // Verifica si la tecla presionada es DELETE
-                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                    // Verifica que la cadena tenga al menos un caracter
-                    if (!documentDigits.isEmpty()) {
-                        // Elimina el último caracter de la cadena
-                        documentDigits = documentDigits.substring(0, documentDigits.length() - 1);
-                        System.out.println("Delete key pressed, new content is: " + documentDigits);
-                    }
-                }
-
                 char c = e.getKeyChar();
                 if (Character.isDigit(c)) {
                     documentDigits += c;
@@ -59,17 +49,17 @@ public class Saller extends javax.swing.JPanel {
                             if (sellers.isEmpty()) {
                                 System.out.println("No se encontraron clientes con el documento: " + documentDigits);
                             } else {
-                                System.out.println("Vendedorres encontrados con el documento: " + documentDigits);
-                                for (SellerModel cli : sellers) {
-                                    System.out.println("ID seller: " + cli.getId());
-                                    System.out.println("Documento seller: " + cli.getDocument());
-                                    System.out.println("Nombres seller: " + cli.getNames());
-                                    System.out.println("Apellidos seller: " + cli.getLastNames());
-                                    System.out.println("-------------------------");
-                                }
+//                                System.out.println("Vendedorres encontrados con el documento: " + documentDigits);
+//                                for (SellerModel cli : sellers) {
+//                                    System.out.println("ID seller: " + cli.getId());
+//                                    System.out.println("Documento seller: " + cli.getDocument());
+//                                    System.out.println("Nombres seller: " + cli.getNames());
+//                                    System.out.println("Apellidos seller: " + cli.getLastNames());
+//                                    System.out.println("-------------------------");
+//                                }
 
-// dibujar los datos en la tabla
-// Crea un modelo de tabla y añade las IDs de las facturas
+                                // dibujar los datos en la tabla
+                                // Crea un modelo de tabla y añade las IDs de las facturas
                                 DefaultTableModel model = new DefaultTableModel();
                                 model.addColumn("Documento");
                                 model.addColumn("Nombres");
@@ -88,8 +78,34 @@ public class Saller extends javax.swing.JPanel {
                     }
                 }
             }
-        });
 
+            public void keyPressed(KeyEvent e) {
+                System.out.println("Has pulsado VK_DELETE o VK_BACK_SPACE ");
+                if (e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
+                    // Verifica que la cadena tenga al menos un caracter
+                    if (!documentDigits.isEmpty()) {
+                        // Elimina el último caracter de la cadena
+                        documentDigits = documentDigits.substring(0, documentDigits.length() - 1);
+                        System.out.println("Delete key pressed, new content is: " + documentDigits);
+                    }
+                }
+            }
+        });
+        // iqual then 
+//        searchVarSeller.addKeyListener(new KeyListener(){
+//            public void keyTyped(KeyEvent e){
+//                //Aqui no funcionara
+//            }
+//            public void keyPressed(KeyEvent e){
+//                if(e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyChar() == KeyEvent.VK_BACK_SPACE){
+//                    JOptionPane.showMessageDialog(null, "Has pulsado VK_DELETE o VK_BACK_SPACE ");
+//                }
+//            }
+//            public void keyReleased(KeyEvent e){
+//                //Aqui tambien puedes insertar el codigo
+//            }
+//        });
+//        
         // evento to ejecutar función cuando se hace clic en un elemento de jTable
         tableViewSellerData.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -312,15 +328,40 @@ public class Saller extends javax.swing.JPanel {
 
     // delete seller action
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // 1. confirm remove saller
         int replyConfirmRemove = javax.swing.JOptionPane.showConfirmDialog(jPanel1, "¿Estas seguro de eliminar el vendedor?");
-        if (replyConfirmRemove == JOptionPane.OK_OPTION) {
-            SellerQuery sellerQuery;
-            try {
-                sellerQuery = new SellerQuery();
-                sellerQuery.remove(documentTableSelected);
-            } catch (SQLException ex) {
-                Logger.getLogger(Saller.class.getName()).log(Level.SEVERE, null, ex);
+        if (replyConfirmRemove != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        SellerQuery sallerQuery;
+        try {
+            // revove saller
+            sallerQuery = new SellerQuery();
+            sallerQuery.remove(documentTableSelected);
+
+            // update table content
+            List<SellerModel> sellers;
+            sellers = sallerQuery.getByDocument(Integer.parseInt(documentDigits));
+
+            if (sellers.isEmpty()) {
+                System.out.println("No se encontraron clientes con el documento: " + documentDigits);
+            } else {
+                // dibujar los datos en la tabla
+                // Crea un modelo de tabla y añade las IDs de las facturas
+                DefaultTableModel model = new DefaultTableModel();
+                model.addColumn("Documento");
+                model.addColumn("Nombres");
+                model.addColumn("Apellidos");
+                for (SellerModel cli : sellers) {
+                    model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
+                }
+
+                // Establece el modelo en la tabla
+                tableViewSellerData.setModel(model);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Saller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

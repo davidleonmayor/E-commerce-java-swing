@@ -14,7 +14,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -120,17 +119,6 @@ public class ListBill extends javax.swing.JFrame {
         String currentTime = this.getCurrentTime();
         String paymentMethod = "1";
         String nameProduct = inputIDBill.getText();
-//        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
-//        int quality = Integer.parseInt(inputQualityProduct.getText());
-//        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
-
-        //  ------------------ past code
-//        // addBill to create a new bill. Needs a new Bill
-//        Bill bill = new Bill(documentUser, documentSeller, getCurrentDate(), getCurrentTime());
-//        // rellenar los detalles de la factura
-//        BillQuery billQuery = new BillQuery();
-//        // billQuery.add(Bill bill, ArrayList<Product> listProducts, int idPaymentMethod);
-//        billQuery.add(bill, buyOptionSelected, qualityProducts);
     }
 
     public int MyOptionPane() {
@@ -330,34 +318,6 @@ public class ListBill extends javax.swing.JFrame {
 
         // Establece el modelo en la tabla
         tableShowIDBills.setModel(model);
-
-//        // prepare data to SQL query
-//        final int inputIDBillToDelete = Integer.parseInt(inputIDBill.getText().trim());
-//        // clear input boxes
-//        inputIDBill.setText("");
-//        System.out.println("Linea 206. id para listar elemento: " + inputIDBillToDelete);
-//        System.out.println("---------------------------------check--------------");
-//        // execute query
-//        ConnectionDB connectionDB = new ConnectionDB();
-//        BillSpecification billSpecification = connectionDB.getBill(inputIDBillToDelete);
-//
-//        // Ahora puedes usar el objeto billSpecification para acceder a los datos de la factura
-//        if (billSpecification != null) {
-//            String billDetails = "Factura ID: " + billSpecification.getId()
-//                    + "\nCliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName()
-//                    + "\nVendedor: " + billSpecification.getSellerName() + " " + billSpecification.getSellerLastName()
-//                    + "\nNúmero de Caja: " + billSpecification.getBoxNumber()
-//                    + "\nFecha: " + billSpecification.getFecha()
-//                    + "\nHora: " + billSpecification.getHora()
-//                    + "\nProducto: " + billSpecification.getProductName()
-//                    + ", Valor unitario: " + billSpecification.getUnitValue()
-//                    + ", Cantidad: " + billSpecification.getQuantity()
-//                    + ", Método de pago: " + billSpecification.getPaymentMethod()
-//                    + "\n--------------------";
-//            productsBill.setText(billDetails);
-//        } else {
-//            System.out.println("No se encontró ninguna factura con el ID: " + inputIDBillToDelete);
-//        }
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

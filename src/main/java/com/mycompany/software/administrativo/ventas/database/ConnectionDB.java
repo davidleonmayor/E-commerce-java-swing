@@ -135,34 +135,6 @@ public class ConnectionDB {
         return matchingIds;
     }
 
-//    public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, String productName, double unitValue, int quantity) {
-//        System.out.println("----------------medodo de validacion--------------");
-//        try {
-//            // Inserta en la tabla 'bills'
-//            stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `id_bill_client`, `id_bill_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '" + idBillClient + "', '" + idBillSeller + "', '" + idBillBox + "', '" + fecha + "', '" + hora + "')", Statement.RETURN_GENERATED_KEYS);
-//
-//            // Obtiene el último ID insertado en 'bills'
-//            ResultSet generatedKeys = stmt.getGeneratedKeys();
-//            if (generatedKeys.next()) {
-//                int lastIdInBills = generatedKeys.getInt(1);
-//
-//                // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
-//                stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", '" + paymentMethod + "')", Statement.RETURN_GENERATED_KEYS);
-//
-//                // Obtiene el último ID insertado en 'bill_details'
-//                generatedKeys = stmt.getGeneratedKeys();
-//                if (generatedKeys.next()) {
-//                    int lastIdInBillDetails = generatedKeys.getInt(1);
-//
-//                    // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
-//                    stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + productName + "', '" + unitValue + "', '" + quantity + "', " + lastIdInBillDetails + ")");
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-//            ex.printStackTrace();
-//        }
-//    }
     public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, List<Product> products) {
         System.out.println("----------------medodo de validacion--------------");
         try {
@@ -231,7 +203,6 @@ public class ConnectionDB {
         }
     }
 
-    // (int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, List<Product> products)
     public BillSpecification getBill(int idBill) throws SQLException {
         BillSpecification billSpecification = null;
         List<Product> products = new ArrayList<>();
@@ -284,50 +255,6 @@ public class ConnectionDB {
         return billSpecification;
     }
 
-//    public BillSpecification getBill(int idBill) throws SQLException {
-//        BillSpecification billSpecification = null;
-//        try {
-//            String rawQueryBill = "SELECT b.id_bill, b.fecha, b.hora, "
-//                    + "c.names AS client_name, c.last_names AS client_last_name, "
-//                    + "s.names AS seller_name, s.last_names AS seller_last_name, "
-//                    + "x.box_number, bd.payment_method, "
-//                    + "p.product_name, p.unit_value, p.quantity "
-//                    + "FROM bills b "
-//                    + "JOIN clients c ON b.id_bill_client = c.id_client "
-//                    + "JOIN sellers s ON b.id_bill_seller = s.id_seller "
-//                    + "JOIN boxes x ON b.id_bill_box = x.id_box "
-//                    + "JOIN bill_details bd ON b.id_bill = bd.id_bill "
-//                    + "JOIN products p ON bd.id_bill_detail = p.id_bill_details_product "
-//                    + "WHERE b.id_bill = " + idBill + " "
-//                    + "ORDER BY bd.id_bill_detail;";
-//            rs = stmt.executeQuery(rawQueryBill);
-//
-//            if (rs.next()) {
-//                billSpecification = new BillSpecification();
-//                billSpecification.setId(rs.getInt("id_bill"));
-//                billSpecification.setFecha(rs.getDate("fecha"));
-//                billSpecification.setHora(rs.getTime("hora"));
-//                billSpecification.setClientName(rs.getString("client_name"));
-//                billSpecification.setClientLastName(rs.getString("client_last_name"));
-//                billSpecification.setSellerName(rs.getString("seller_name"));
-//                billSpecification.setSellerLastName(rs.getString("seller_last_name"));
-//                billSpecification.setBoxNumber(rs.getInt("box_number"));
-//                billSpecification.setPaymentMethod(rs.getString("payment_method"));
-//                billSpecification.setProductName(rs.getString("product_name"));
-//                billSpecification.setUnitValue(rs.getInt("unit_value"));
-//                billSpecification.setQuantity(rs.getInt("quantity"));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-//            ex.printStackTrace();
-//        } finally {
-//            if (rs != null) {
-//                rs.close();
-//            }
-//        }
-//
-//        return billSpecification;
-//    }
     public void verifyInsertion() {
         try {
             // Verifica la inserción en la tabla 'bills'

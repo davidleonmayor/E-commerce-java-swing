@@ -1,11 +1,8 @@
 package com.mycompany.software.administrativo.ventas.views;
 
 import com.mycompany.software.administrativo.ventas.database.ClientQuery;
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.ClientModel;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
