@@ -10,10 +10,11 @@ public class loginQuery extends ConnectionDB {
     public loginQuery() {
     }
 
-    public boolean checkIfManagerExist(int document, int password) {
+    public boolean checkIfManagerExist(int document, String password) {
         try {
             // Crear la consulta SQL
-            String query = "SELECT * FROM `manager` WHERE `document_manager` = " + document + " AND `password_manager` = " + password;
+//          String query = "SELECT * FROM `manager` WHERE `document_manager` = " + document + " AND `password_manager` = " + password;
+            String query = "SELECT * FROM `manager` WHERE `document_manager` = " + document + " AND `password_manager` = '" + password + "'";
 
             // Ejecutar la consulta
             this.rs = stmt.executeQuery(query);
@@ -31,10 +32,11 @@ public class loginQuery extends ConnectionDB {
         return false; // Si no se encontró ninguna fila, el gerente no existe o la contraseña es incorrecta
     }
 
-    public boolean checkIfSellerExist(int document, int password) {
+    public boolean checkIfSellerExist(int document, String password) {
         try {
             // Crear la consulta SQL
-            String query = "SELECT * FROM `sellers` WHERE `document` = " + document + " AND `password_sellers` = " + password;
+//          String query = "SELECT * FROM `sellers` WHERE `document` = " + document + " AND `password_sellers` = " + password;
+            String query = "SELECT * FROM `sellers` WHERE `document` = " + document + " AND `password_sellers` = '" + password + "'";
 
             // Ejecutar la consulta
             this.rs = stmt.executeQuery(query);

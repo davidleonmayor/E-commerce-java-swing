@@ -27,7 +27,6 @@ public class SellerQuery extends ConnectionDB {
         String query = "INSERT INTO `sellers` (`document`, `password_sellers`, `names`, `last_names`) VALUES (" + document + ", '" + hashedPassword + "', '" + names + "', '" + last_names + "')";
         this.stmt.executeUpdate(query);
     }
-
     
     public void remove(int document) {
         try {
@@ -65,7 +64,7 @@ public class SellerQuery extends ConnectionDB {
     private String removeOneSellerStadmend = "DELETE FROM `sellers` WHERE `document` = ";
     
     // ----
-    private String hashPassword(String password) {
+    public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] hashInBytes = md.digest(password.getBytes());

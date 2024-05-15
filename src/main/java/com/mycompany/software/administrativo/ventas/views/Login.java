@@ -1,5 +1,6 @@
 package com.mycompany.software.administrativo.ventas.views;
 
+import com.mycompany.software.administrativo.ventas.database.SellerQuery;
 import com.mycompany.software.administrativo.ventas.database.loginQuery;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,7 +60,7 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(fruitListScrollPane);
         jPanel1.add(showButton);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -157,7 +158,8 @@ public class Login extends javax.swing.JFrame {
         // check in database if exist and is correct
         loginQuery loginQuery = new loginQuery();
         if (range.equals("Gerente")) {
-            if (loginQuery.checkIfManagerExist(document, password)) {
+            String hashedPassword = SellerQuery.hashPassword(Integer.toString(password));
+            if (loginQuery.checkIfManagerExist(document, hashedPassword)) {
                 System.out.println("exite");
                 try {
                     new Dashboard(1).setVisible(true);
@@ -170,7 +172,8 @@ public class Login extends javax.swing.JFrame {
             }
 
         } else if (range.equals("Trabajador")) {
-            if (loginQuery.checkIfSellerExist(document, password)) {
+            String hashedPassword = SellerQuery.hashPassword(Integer.toString(password));
+            if (loginQuery.checkIfSellerExist(document, hashedPassword)) {
                 System.out.println("exite");
                 try {
                     new Dashboard(2).setVisible(true);
@@ -179,7 +182,6 @@ public class Login extends javax.swing.JFrame {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-
                 JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
             }
         }
