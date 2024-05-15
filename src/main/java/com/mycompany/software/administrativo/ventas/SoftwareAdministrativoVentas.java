@@ -5,7 +5,13 @@
 // 3) elimimar en el pane de cliente todo el CRUD.
 // Solo dejar que pueda listar y filtra los clientes qu existen, para que tenga centido con relacion al punto (1)
 // 4)  del vendedor 
-// TODO: agregar clase abstracta requerida,
+
+/* TODO: 
+1) agregar clase abstracta requerida 
+2) CRUD requerido :check
+3) login requrido con roles y almacenemiento de contraseñas incriptadas :check
+*/
+
 
 // estructura presente continuo
 // pronombre + was/were(depende del pronombre) + verbo(ing) + complemento

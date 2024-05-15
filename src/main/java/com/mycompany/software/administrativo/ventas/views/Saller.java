@@ -397,7 +397,7 @@ public class Saller extends javax.swing.JPanel {
         SellerQuery sellerQuery;
         try {
             sellerQuery = new SellerQuery();
-            sellerQuery.create(document, password, names, lastNames);
+            sellerQuery.create(document, Integer.toString(password), names, lastNames);
         } catch (SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }

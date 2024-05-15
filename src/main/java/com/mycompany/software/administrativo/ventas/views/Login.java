@@ -79,7 +79,7 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Documennto");
+        jLabel1.setText("Documento");
 
         jLabel2.setText("Contraseña");
 
