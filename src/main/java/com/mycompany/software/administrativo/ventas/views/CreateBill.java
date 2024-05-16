@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 // TODO:
@@ -25,6 +26,9 @@ public class CreateBill extends javax.swing.JFrame {
 
     public CreateBill() {
         initComponents();
+
+        // Configurar el comportamiento de cierre
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     private void setItemInQualityProducts(String name, float unitValue, int quantity) {
@@ -44,31 +48,28 @@ public class CreateBill extends javax.swing.JFrame {
     }
 
     private void finalizeBill() throws SQLException {
-            // input data user
-    int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
-    int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
-    int buyOptionSelected = this.MyOptionPane();
-    // initialize the SQL query
-    ConnectionDB connectionDB = new ConnectionDB();
-    int idBillClientDefult = 1;
-    int idBillSellerDefult = 2;
-    int idBillBoxDefult = 2;
-    String currentDate = this.getCurrentDate();
-    String currentTime = this.getCurrentTime();
-    String paymentMethod = "1";
+        // input data user
+        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+        int buyOptionSelected = this.MyOptionPane();
+        // initialize the SQL query
+        ConnectionDB connectionDB = new ConnectionDB();
+        int idBillClientDefult = 1;
+        int idBillSellerDefult = 2;
+        int idBillBoxDefult = 2;
+        String currentDate = this.getCurrentDate();
+        String currentTime = this.getCurrentTime();
+        String paymentMethod = "1";
 
-    // execute query
-    connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
+        // execute query
+        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
 
-    // clear input boxes
-    inputNameProduct.setText("");
-    inputUnitaryValueProduct.setText("");
-    inputQualityProduct.setText("");
-    
-    
-    // ------------- code pass method -------------
-        
-        
+        // clear input boxes
+        inputNameProduct.setText("");
+        inputUnitaryValueProduct.setText("");
+        inputQualityProduct.setText("");
+
+        // ------------- code pass method -------------
 //        // input data user
 //        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
 //        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
@@ -264,7 +265,7 @@ public class CreateBill extends javax.swing.JFrame {
 
         // agregar producto a la lista de productos que se pasa al generar la bill
         qualityProducts.add(new Product(name, unitValue, quantity));
-        
+
 // Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
         ContainerProductEspesification panel = new ContainerProductEspesification(name, unitValue, quantity);
 

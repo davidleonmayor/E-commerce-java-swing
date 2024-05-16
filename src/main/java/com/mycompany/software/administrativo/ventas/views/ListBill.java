@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
+import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -33,6 +34,9 @@ public class ListBill extends javax.swing.JFrame {
 
     public ListBill() {
         initComponents();
+
+        // Configurar el comportamiento de cierre
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 //        GUI styles
         containerContentBillSelected.setLayout(new BorderLayout());
