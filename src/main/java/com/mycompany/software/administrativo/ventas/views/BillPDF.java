@@ -4,23 +4,22 @@ package com.mycompany.software.administrativo.ventas.views;
  1) when delete button is clicked and confirm to remove the seller, update the table with his own data :check
  2) make an event then changes the document input list matches 
  */
+import com.itextpdf.text.DocumentException;
 import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.database.SellerQuery;
 import com.mycompany.software.administrativo.ventas.tools.AbrirPDF;
 import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
 import com.mycompany.software.administrativo.ventas.tools.MakePDF;
-import com.mycompany.software.administrativo.ventas.tools.SellerModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -192,8 +191,8 @@ public class BillPDF extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(46, 46, 46)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(74, 74, 74))
         );
 
@@ -221,14 +220,24 @@ public class BillPDF extends javax.swing.JPanel {
         try {
             connectionDB = new ConnectionDB();
             billSpecification = connectionDB.getBill(documentTableSelected);
+
         } catch (SQLException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         // PDF
-//        MakePDF.crearPDF("zapato", "hoy"); // usar crearBillPDF mehtod
-        MakePDF.crearBillPDF(billSpecification); // usar crearBillPDF mehtod
-        AbrirPDF.abrirPDF();
+        // adding the content of "billSpecification" in the pdf
+        MakePDF makePDF = new MakePDF();
+        try {
+            try {
+                makePDF.draw(billSpecification);
+            } catch (IOException ex) {
+                Logger.getLogger(BillPDF.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            AbrirPDF.abrirPDF();
+        } catch (DocumentException ex) {
+            Logger.getLogger(BillPDF.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
