@@ -17,9 +17,6 @@ public class BillSpecification {
         this.sellerLastName = sellerLastName;
         this.boxNumber = boxNumber;
         this.paymentMethod = paymentMethod;
-//        this.productName = productName;
-//        this.unitValue = unitValue;
-//        this.quantity = quantity;
     }
 
     public BillSpecification() {}
@@ -68,18 +65,6 @@ public class BillSpecification {
         return paymentMethod;
     }
 
-//    public String getProductName() {
-//        return productName;
-//    }
-
-//    public int getUnitValue() {
-//        return unitValue;
-//    }
-
-//    public int getQuantity() {
-//        return quantity;
-//    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -116,18 +101,6 @@ public class BillSpecification {
         this.paymentMethod = paymentMethod;
     }
 
-//    public void setProductName(String productName) {
-//        this.productName = productName;
-//    }
-
-//    public void setUnitValue(int unitValue) {
-//        this.unitValue = unitValue;
-//    }
-
-//    public void setQuantity(int quantity) {
-//        this.quantity = quantity;
-//    }
-
     private int id;
     private Date fecha;
     private Time hora;
@@ -137,7 +110,4 @@ public class BillSpecification {
     private String sellerLastName;
     private int boxNumber;
     private String paymentMethod;
-//    private String productName;
-//    private int unitValue;
-//    private int quantity;
 }

@@ -134,44 +134,6 @@ public class BillQuery extends ConnectionDB {
         }
     }
 
-//    public void add(int idBillClient, int idBillSeller, String fecha, String hora) {
-//        String complit = rawQueryAdd + "(id_bill, id_client, id_saller, id_box)"
-//                + " VALUES" + "(" + bill.clientId() + ", " + bill.sallerId() + ", " + bill.boxId() + ")";
-//        System.out.println("complit");
-////            statement.executeUpdate(complit);
-//        try {
-//            // Obtener los IDs de los clientes, vendedores y cajas
-//            int clientId = getClientId(bill.getClientName(), bill.getClientLastName());
-//            int sellerId = getSellerId(bill.getSellerName(), bill.getSellerLastName());
-//            int boxNumber = getBoxNumber(bill.getBoxNumber());
-//
-//            // Crear la consulta SQL para insertar la factura
-//            String sql = "INSERT INTO bills (id_bill_client, id_bill_seller, id_bill_box, fecha, hora) VALUES (?, ?, ?, ?, ?)";
-//
-//            // Crear un PreparedStatement para ejecutar la consulta SQL
-//            PreparedStatement pstmt = con.prepareStatement(sql);
-//
-//            // Establecer los valores de los parámetros
-//            pstmt.setInt(1, clientId);
-//            pstmt.setInt(2, sellerId);
-//            pstmt.setInt(3, boxNumber);
-//            pstmt.setDate(4, bill.getDate());
-//            pstmt.setTime(5, bill.getTime());
-//
-//            // Ejecutar la consulta SQL
-//            pstmt.executeUpdate();
-//
-//            // Obtener el ID de la factura recién insertada
-//            int billId = getInsertedBillId();
-//
-//            // Insertar los detalles de la factura
-//            for (Product product : bill.getProducts()) {
-//                addBillDetail(billId, product);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     public void remove(int billId) {
         try {
             statement.executeUpdate(rawQueryRemove + String.valueOf(billId));
