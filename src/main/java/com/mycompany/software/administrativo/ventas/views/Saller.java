@@ -4,7 +4,7 @@ package com.mycompany.software.administrativo.ventas.views;
  1) when delete button is clicked and confirm to remove the seller, update the table with his own data :check
  2) make an event then changes the document input list matches 
  */
-import com.mycompany.software.administrativo.ventas.database.SellerQuery;
+import com.mycompany.software.administrativo.ventas.model.SellerQuery;
 import com.mycompany.software.administrativo.ventas.tools.SellerModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

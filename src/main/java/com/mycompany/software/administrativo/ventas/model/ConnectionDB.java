@@ -1,4 +1,4 @@
-package com.mycompany.software.administrativo.ventas.database;
+package com.mycompany.software.administrativo.ventas.model;
 
 /* query to select all bills with his own content
 SELECT b.id_bill, b.fecha, b.hora,

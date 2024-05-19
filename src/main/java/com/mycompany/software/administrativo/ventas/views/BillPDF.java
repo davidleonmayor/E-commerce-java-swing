@@ -5,8 +5,8 @@ package com.mycompany.software.administrativo.ventas.views;
  2) make an event then changes the document input list matches 
  */
 import com.itextpdf.text.DocumentException;
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
-import com.mycompany.software.administrativo.ventas.database.SellerQuery;
+import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.model.SellerQuery;
 import com.mycompany.software.administrativo.ventas.tools.AbrirPDF;
 import com.mycompany.software.administrativo.ventas.tools.BillSpecification;
 import com.mycompany.software.administrativo.ventas.tools.MakePDF;

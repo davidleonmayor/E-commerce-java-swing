@@ -6,8 +6,8 @@ package com.mycompany.software.administrativo.ventas.views;
    si esta correctamente, mostrar la vista principal(vista)
 
  */
-import com.mycompany.software.administrativo.ventas.database.SellerQuery;
-import com.mycompany.software.administrativo.ventas.database.loginQuery;
+import com.mycompany.software.administrativo.ventas.model.SellerQuery;
+import com.mycompany.software.administrativo.ventas.model.loginQuery;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

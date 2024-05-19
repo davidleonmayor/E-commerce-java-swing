@@ -1,6 +1,6 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
 import java.sql.SQLException;
 import java.time.LocalDate;

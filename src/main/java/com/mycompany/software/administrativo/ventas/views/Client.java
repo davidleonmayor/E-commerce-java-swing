@@ -1,6 +1,6 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.database.ClientQuery;
+import com.mycompany.software.administrativo.ventas.model.ClientQuery;
 import com.mycompany.software.administrativo.ventas.tools.ClientModel;
 
 import java.awt.event.KeyAdapter;

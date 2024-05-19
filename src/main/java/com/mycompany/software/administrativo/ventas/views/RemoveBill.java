@@ -1,7 +1,7 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.database.BillQuery;
-import com.mycompany.software.administrativo.ventas.database.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.model.BillQuery;
+import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
 import com.mycompany.software.administrativo.ventas.tools.Bill;
 import java.sql.SQLException;

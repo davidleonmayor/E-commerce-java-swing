@@ -6,7 +6,7 @@ import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
 
-import com.mycompany.software.administrativo.ventas.database.BillQuery;
+import com.mycompany.software.administrativo.ventas.model.BillQuery;
 import com.mycompany.software.administrativo.ventas.tools.AbrirPDF;
 import com.mycompany.software.administrativo.ventas.tools.MakePDF;
 import java.sql.SQLException;

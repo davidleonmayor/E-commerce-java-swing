@@ -1,4 +1,4 @@
-package com.mycompany.software.administrativo.ventas.database;
+package com.mycompany.software.administrativo.ventas.model;
 
 import com.mycompany.software.administrativo.ventas.tools.ClientModel;
 
