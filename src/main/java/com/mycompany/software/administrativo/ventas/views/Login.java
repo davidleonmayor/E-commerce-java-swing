@@ -1,19 +1,19 @@
 package com.mycompany.software.administrativo.ventas.views;
 
+/*
+1) tomar los datos limpios y validados de la vista
+2) validar que el usuario esta correctamente registrado(modelo) desde el controlador.
+   si esta correctamente, mostrar la vista principal(vista)
+
+ */
 import com.mycompany.software.administrativo.ventas.database.SellerQuery;
 import com.mycompany.software.administrativo.ventas.database.loginQuery;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 public class Login extends javax.swing.JFrame {
 
@@ -25,42 +25,11 @@ public class Login extends javax.swing.JFrame {
 //        prepareGUI();
     }
 
-    private void prepareGUI() {
-        statusLabel = new JLabel("", JLabel.CENTER);
-        statusLabel.setSize(350, 100);
-
-//        controlPanel = new JPanel(); // Initialize controlPanel
-        showComboboxDemo();
-    }
-
-    private void showComboboxDemo() {
-        final DefaultComboBoxModel fruitsName = new DefaultComboBoxModel();
-        fruitsName.addElement("Apple");
-        fruitsName.addElement("Grapes");
-        fruitsName.addElement("Mango");
-        fruitsName.addElement("Peer");
-
-        final JComboBox fruitCombo = new JComboBox(fruitsName);
-        fruitCombo.setSelectedIndex(0);
-
-        JScrollPane fruitListScrollPane = new JScrollPane(fruitCombo);
-        JButton showButton = new JButton("Show");
-
-        showButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String data = "";
-                if (fruitCombo.getSelectedIndex() != -1) {
-                    data = "Fruits Selected: " + fruitCombo.getItemAt(fruitCombo.getSelectedIndex());
-                }
-                statusLabel.setText(data);
-            }
-        });
-
-        jPanel1.setLocation(10, 10);
-        jPanel1.add(fruitListScrollPane);
-        jPanel1.add(showButton);
-    }
-
+//    private void prepareGUI() {
+//        statusLabel = new JLabel("", JLabel.CENTER);
+//        statusLabel.setSize(350, 100);
+//
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,6 +52,12 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setText("Documento");
 
         jLabel2.setText("Contraseña");
+
+        documentInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                documentInputActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Acceder");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -147,15 +122,45 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void obtionRangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_obtionRangeActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_obtionRangeActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         final String range = obtionRange.getSelectedItem().toString();
-        final int document = Integer.parseInt(documentInput.getText());
-        final int password = Integer.parseInt(passwordInput.getText());
+        int document = 0;
+        int password = 0;
 
-        // check in database if exist and is correct
+        // Validar que el rango no esté vacío
+        if (range.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, selecciona un rango");
+            return;
+        }
+        // Validar que el documento no esté vacío
+        if (documentInput.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, introduce un documento");
+            return;
+        }
+        // Intentar convertir el documento a un número entero
+        try {
+            document = Integer.parseInt(documentInput.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor, introduce un número válido para el documento");
+            return;
+        }
+        // Validar que la contraseña no esté vacía
+        if (passwordInput.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, introduce una contraseña");
+            return;
+        }
+        // Intentar convertir la contraseña a un número entero
+        try {
+            password = Integer.parseInt(passwordInput.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor, introduce un número válido para la contraseña");
+            return;
+        }
+
+        // check if exist and is correct in database
         loginQuery loginQuery = new loginQuery();
         if (range.equals("Gerente")) {
             String hashedPassword = SellerQuery.hashPassword(Integer.toString(password));
@@ -168,7 +173,7 @@ public class Login extends javax.swing.JFrame {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
+                JOptionPane.showMessageDialog(null, "Credenciales incorrectas o no existentes");
             }
 
         } else if (range.equals("Trabajador")) {
@@ -182,45 +187,14 @@ public class Login extends javax.swing.JFrame {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                JOptionPane.showConfirmDialog(null, "Credenciales incorrectas o no existentes");
+                JOptionPane.showMessageDialog(null, "Credenciales incorrectas o no existentes");
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void documentInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentInputActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_documentInputActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField documentInput;

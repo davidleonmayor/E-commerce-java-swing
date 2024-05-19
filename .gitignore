@@ -3,3 +3,7 @@
 
 # Ignorar otros archivos generados
 target/
+
+# Ignorar archivos de construcción
+build/
+**/*.class
