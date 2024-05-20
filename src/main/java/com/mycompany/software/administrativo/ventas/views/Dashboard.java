@@ -1,4 +1,7 @@
-// TODO: add icons in var menu
+/* TODO 
+1) check error than not let use flatlaf styles
+2) add icons in var menu
+ */
 package com.mycompany.software.administrativo.ventas.views;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -6,45 +9,33 @@ import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
 
-import com.mycompany.software.administrativo.ventas.model.BillQuery;
-import com.mycompany.software.administrativo.ventas.tools.AbrirPDF;
-import com.mycompany.software.administrativo.ventas.tools.MakePDF;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import controller.LoginCon;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    public Dashboard(int role) throws SQLException {
+    public Dashboard(int role) {
         initComponents();
         initStyles();
         initContent();
 
         switch (role) {
-            case 1:
-                break;
-            case 2:
+            case 1 ->
+                System.out.println("manager role");
+            case 2 ->
                 jButton4.setVisible(false);
-                break;
-            default:
+            default ->
                 throw new AssertionError();
         }
-
     }
 
     private void initStyles() {
         menssajeHeader.putClientProperty("FlatLaf.style", "font: 200% $light.font");
         menssajeHeader.setForeground(Color.BLACK);
-
         titleMenu.putClientProperty("FlatLaf.style", "font: 300% $light.font");
     }
 
-    private void initContent() throws SQLException {
-        this.openOptionCrudBillPane();
-
-        // print databse bills contet 
-//        BillQuery billQuery = new BillQuery();
-//        billQuery.all();
+    private void initContent() {
+        openOptionCrudBillPane();
     }
 
     private void openOptionCrudBillPane() {
@@ -108,6 +99,7 @@ public class Dashboard extends javax.swing.JFrame {
         titleMenu = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         header = new javax.swing.JPanel();
+        jButton5 = new javax.swing.JButton();
         content = new javax.swing.JPanel();
         menssajeHeader = new javax.swing.JLabel();
 
@@ -183,15 +175,28 @@ public class Dashboard extends javax.swing.JFrame {
 
         header.setBackground(new java.awt.Color(25, 118, 210));
 
+        jButton5.setText("Salir");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addContainerGap())
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 90, Short.MAX_VALUE)
+            .addGroup(headerLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
@@ -255,7 +260,7 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.openOptionCrudBillPane();
+        openOptionCrudBillPane();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -270,26 +275,10 @@ public class Dashboard extends javax.swing.JFrame {
         openBillPFDPane();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // TODO: Look and feel don't work
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (Exception ex) {
-            System.err.println("Failed to initialize LaF");
-        }
-
-        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                try {
-//                    new Dashboard(1).setVisible(true);
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        });
-    }
+    // sing off 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        LoginCon.closeFrameAndOpenLogin(this);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
@@ -299,6 +288,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel menssajeHeader;
     private javax.swing.JPanel menu;
     private javax.swing.JLabel titleMenu;
