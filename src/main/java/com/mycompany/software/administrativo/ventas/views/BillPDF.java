@@ -42,11 +42,13 @@ public class BillPDF extends javax.swing.JPanel {
                     // Ejecutar la búsqueda solo si la cadena no está vacía
                     if (!documentDigits.isEmpty()) {
                         // Ejecutar aquí lo que quieras hacer cuando se presione una tecla numérica
+                        //------------------------------------------------------------------------
+                        // CLEAR NOT NEEDED CODE
+                        //------------------------------------------------------------------------
                         SellerQuery sellertQuery;
 
                         ConnectionDB connectionDB;
                         List<Integer> bills;
-                        try {
                             sellertQuery = new SellerQuery();
                             connectionDB = new ConnectionDB();
                             bills = connectionDB.filterBills(documentDigits);
@@ -62,10 +64,7 @@ public class BillPDF extends javax.swing.JPanel {
 
                             // Establece el modelo en la tabla
                             tableViewSellerData.setModel(model);
-                        } catch (SQLException err) {
-                            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, err);
-                            err.printStackTrace();
-                        }
+                        
                     }
                 }
             }

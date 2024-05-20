@@ -16,23 +16,48 @@ import java.security.NoSuchAlgorithmException;
 
 public class SellerQuery extends ConnectionDB {
 
-    public SellerQuery() throws SQLException {
-        super();
-    }
-
-     public void create(int document, String password, String names, String last_names) throws SQLException {
-        String hashedPassword = hashPassword(password);
-         System.out.println("hashed password: " + hashedPassword);
-
-        String query = "INSERT INTO `sellers` (`document`, `password_sellers`, `names`, `last_names`) VALUES (" + document + ", '" + hashedPassword + "', '" + names + "', '" + last_names + "')";
-        this.stmt.executeUpdate(query);
-    }
+    private String removeOneSellerStadmend = "DELETE FROM `sellers` WHERE `document` = ";
     
+    // ----
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashInBytes = md.digest(password.getBytes());
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashInBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void create(int document, String password, String names, String last_names) {
+        String hashedPassword = hashPassword(password);
+        System.out.println("hashed password: " + hashedPassword);
+
+        try {
+            String query = "INSERT INTO `sellers` (`document`, `password_sellers`, `names`, `last_names`) VALUES (" + document + ", '" + hashedPassword + "', '" + names + "', '" + last_names + "')";
+            this.stmt.executeUpdate(query);
+            System.out.println("Created");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(loginQuery.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close();
+        }
+    }
+
     public void remove(int document) {
         try {
             this.stmt.executeUpdate(removeOneSellerStadmend + document);
         } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(loginQuery.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close();
         }
     }
 
@@ -56,27 +81,13 @@ public class SellerQuery extends ConnectionDB {
                 clients.add(client);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClientQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(loginQuery.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close();
         }
+
         return clients;
     }
 
-    private String removeOneSellerStadmend = "DELETE FROM `sellers` WHERE `document` = ";
     
-    // ----
-    public static String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] hashInBytes = md.digest(password.getBytes());
-
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashInBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

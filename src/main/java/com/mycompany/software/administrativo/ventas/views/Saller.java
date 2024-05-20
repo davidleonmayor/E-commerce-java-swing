@@ -40,41 +40,27 @@ public class Saller extends javax.swing.JPanel {
                     if (!documentDigits.isEmpty()) {
                         // Ejecutar aquí lo que quieras hacer cuando se presione una tecla numérica
                         System.out.println("Se presionó la tecla numérica: " + c);
-                        SellerQuery sellertQuery;;
+                        SellerQuery sellertQuery = new SellerQuery();;
                         List<SellerModel> sellers;
-                        try {
-                            sellertQuery = new SellerQuery();
-                            sellers = sellertQuery.getByDocument(Integer.parseInt(documentDigits));
+                        sellers = sellertQuery.getByDocument(Integer.parseInt(documentDigits));
 
-                            if (sellers.isEmpty()) {
-                                System.out.println("No se encontraron clientes con el documento: " + documentDigits);
-                            } else {
-//                                System.out.println("Vendedorres encontrados con el documento: " + documentDigits);
-//                                for (SellerModel cli : sellers) {
-//                                    System.out.println("ID seller: " + cli.getId());
-//                                    System.out.println("Documento seller: " + cli.getDocument());
-//                                    System.out.println("Nombres seller: " + cli.getNames());
-//                                    System.out.println("Apellidos seller: " + cli.getLastNames());
-//                                    System.out.println("-------------------------");
-//                                }
-
-                                // dibujar los datos en la tabla
-                                // Crea un modelo de tabla y añade las IDs de las facturas
-                                DefaultTableModel model = new DefaultTableModel();
-                                model.addColumn("Documento");
-                                model.addColumn("Nombres");
-                                model.addColumn("Apellidos");
-                                for (SellerModel cli : sellers) {
-                                    model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
-                                }
-
-                                // Establece el modelo en la tabla
-                                tableViewSellerData.setModel(model);
+                        if (sellers.isEmpty()) {
+                            System.out.println("No se encontraron clientes con el documento: " + documentDigits);
+                        } else {
+                            // dibujar los datos en la tabla
+                            // Crea un modelo de tabla y añade las IDs de las facturas
+                            DefaultTableModel model = new DefaultTableModel();
+                            model.addColumn("Documento");
+                            model.addColumn("Nombres");
+                            model.addColumn("Apellidos");
+                            for (SellerModel cli : sellers) {
+                                model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
                             }
-                        } catch (SQLException err) {
-                            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, err);
-                            err.printStackTrace();
+
+                            // Establece el modelo en la tabla
+                            tableViewSellerData.setModel(model);
                         }
+
                     }
                 }
             }
@@ -328,40 +314,34 @@ public class Saller extends javax.swing.JPanel {
 
     // delete seller action
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // 1. confirm remove saller
+        // 1) user confirm remove saller
         int replyConfirmRemove = javax.swing.JOptionPane.showConfirmDialog(jPanel1, "¿Estas seguro de eliminar el vendedor?");
         if (replyConfirmRemove != JOptionPane.OK_OPTION) {
             return;
         }
 
-        SellerQuery sallerQuery;
-        try {
-            // revove saller
-            sallerQuery = new SellerQuery();
-            sallerQuery.remove(documentTableSelected);
+        // 2) revove saller
+        SellerQuery sallerQuery = new SellerQuery();
+        sallerQuery.remove(documentTableSelected);
 
-            // update table content
-            List<SellerModel> sellers;
-            sellers = sallerQuery.getByDocument(Integer.parseInt(documentDigits));
-
-            if (sellers.isEmpty()) {
-                System.out.println("No se encontraron clientes con el documento: " + documentDigits);
-            } else {
-                // dibujar los datos en la tabla
-                // Crea un modelo de tabla y añade las IDs de las facturas
-                DefaultTableModel model = new DefaultTableModel();
-                model.addColumn("Documento");
-                model.addColumn("Nombres");
-                model.addColumn("Apellidos");
-                for (SellerModel cli : sellers) {
-                    model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
-                }
-
-                // Establece el modelo en la tabla
-                tableViewSellerData.setModel(model);
+        // 3) update table content
+        List<SellerModel> sellers;
+        sellers = sallerQuery.getByDocument(Integer.parseInt(documentDigits));
+        if (sellers.isEmpty()) {
+            System.out.println("No se encontraron clientes con el documento: " + documentDigits);
+        } else {
+            // draw data in table
+            // make table module y add data
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Documento");
+            model.addColumn("Nombres");
+            model.addColumn("Apellidos");
+            for (SellerModel cli : sellers) {
+                model.addRow(new Object[]{cli.getDocument(), cli.getNames(), cli.getLastNames()});
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Saller.class.getName()).log(Level.SEVERE, null, ex);
+
+            // set table model
+            tableViewSellerData.setModel(model);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -371,18 +351,17 @@ public class Saller extends javax.swing.JPanel {
 
     // crate seller action
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // 1. catch inputs user
+        // 1) catch inputs user
         String documentStr = documentInput.getText(),
                 passwordStr = passwordInput.getText(),
                 names = nameInput.getText(),
                 lastNames = lastNameInput.getText();
 
-        // 2. check correct data type inputs
+        // 2) check correct data type inputs
         if (documentStr.isEmpty() || passwordStr.isEmpty() || names.isEmpty() || names.isEmpty() || lastNames.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios", "Confirmación", JOptionPane.YES_NO_OPTION);
             return;
         }
-
         // types conversion
         int document = 0,
                 password = 0;
@@ -393,14 +372,9 @@ public class Saller extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "El documento y la contraseña deben ser números enteros válidos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        // 3. Make a new sellr with the captured user data
-        SellerQuery sellerQuery;
-        try {
-            sellerQuery = new SellerQuery();
-            sellerQuery.create(document, Integer.toString(password), names, lastNames);
-        } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // 3. Make a new saller with the captured user data
+        SellerQuery sellerQuery = new SellerQuery();
+        sellerQuery.create(document, Integer.toString(password), names, lastNames);
 
         // 4. clear inputs
         documentInput.setText("");
