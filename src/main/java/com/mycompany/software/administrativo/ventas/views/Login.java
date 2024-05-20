@@ -4,8 +4,13 @@ import com.mycompany.software.administrativo.ventas.model.SellerQuery;
 import controller.LoginCon;
 import javax.swing.JOptionPane;
 
+/**
+ * The Login class extends javax.swing.JFrame and represents the login window of the application.
+ * It contains methods for validating user input and handling the login process.
+ */
 public class Login extends javax.swing.JFrame {
 
+    // storage range, document number, and password input
     private String range;
     private int document;
     private int password;
@@ -14,40 +19,50 @@ public class Login extends javax.swing.JFrame {
         initComponents();
     }
 
+    /**
+     * Closes the current frame
+     */
     public void close() {
         this.dispose(); // Cierra la ventana
     }
 
+    /**
+     * Checks and cleans the user input.
+     * It validates the range, document number, and password entered by the user.
+     * @return True if the input is valid, false otherwise.
+     */
     private boolean checkAndCleanInputUser() {
-        range = obtionRange.getSelectedItem().toString();
+        range = obtionRange.getSelectedItem().toString().trim();
 
-        // Validar que el rango no esté vacío
+        // Validate that the range is not empty
         if (range.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, selecciona un rango");
+             JOptionPane.showMessageDialog(this, "Por favor, selecciona un rango");
             return false;
         }
-        // Validar que el documento no esté vacío
-        if (documentInput.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, introduce un documento");
+        // Validate that the document is not empty
+        String documentInputText = documentInput.getText().trim();
+        if (documentInputText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, introduce un documento");
             return false;
         }
-        // Intentar convertir el documento a un número entero
+        // Try to convert the document to an integer
         try {
-            document = Integer.parseInt(documentInput.getText());
+            document = Integer.parseInt(documentInputText);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, introduce un número válido para el documento");
+            JOptionPane.showMessageDialog(this, "Por favor, introduce un número válido para el documento");
             return false;
         }
-        // Validar que la contraseña no esté vacía
-        if (passwordInput.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, introduce una contraseña");
+        // Validate that the password is not empty
+        String passwordInputText = passwordInput.getText().trim();
+        if (passwordInputText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, introduce una contraseña");
             return false;
         }
-        // Intentar convertir la contraseña a un número entero
+        // Try to convert the password to an integer
         try {
-            password = Integer.parseInt(passwordInput.getText());
+            password = Integer.parseInt(passwordInputText);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, introduce un número válido para la contraseña");
+            JOptionPane.showMessageDialog(this, "Por favor introdusca un número valido para la contraseña");
             return false;
         }
 
@@ -144,6 +159,11 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_obtionRangeActionPerformed
 
+    /**
+     * Event called when the login button is clicked.
+     * It checks the user input and, if valid, attempts to log in the user as a manager or seller.
+     * @param evt The ActionEvent object representing the button click event.
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // check inputs
         if (!checkAndCleanInputUser()) {

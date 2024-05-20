@@ -9,10 +9,19 @@ import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
 
+/**
+ * Extends javax.swing.JFrame is a frame to browse between session
+ */
 import controller.LoginCon;
 
 public class Dashboard extends javax.swing.JFrame {
 
+    /**
+     * The constructor for the Dashboard class. Initializes the components,
+     * styles, and content of the window based on the user's role.
+     *
+     * @param role The role of the user (1 for manager, 2 for seller).
+     */
     public Dashboard(int role) {
         initComponents();
         initStyles();
@@ -28,6 +37,9 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Initializes the styles of the window.
+     */
     private void initStyles() {
         menssajeHeader.putClientProperty("FlatLaf.style", "font: 200% $light.font");
         menssajeHeader.setForeground(Color.BLACK);
@@ -38,6 +50,10 @@ public class Dashboard extends javax.swing.JFrame {
         openOptionCrudBillPane();
     }
 
+    /**
+     * Opens the OptionCrudBill pane. It creates a new OptionCrudBill object,
+     * sets its size and location, and adds it to the content pane.
+     */
     private void openOptionCrudBillPane() {
         OptionCrudBill OptionCrudBillPane = new OptionCrudBill();
         OptionCrudBillPane.setSize(750, 430);
@@ -49,6 +65,10 @@ public class Dashboard extends javax.swing.JFrame {
         content.repaint();
     }
 
+    /**
+     * Opens the openClientPane pane. It creates a new OptionCrudBill object,
+     * sets its size and location, and adds it to the content pane.
+     */
     private void openClientPane() {
         Client clientPane = new Client();
         clientPane.setSize(750, 430);
@@ -60,6 +80,10 @@ public class Dashboard extends javax.swing.JFrame {
         content.repaint();
     }
 
+    /**
+     * Opens the openSallerPane pane. It creates a new OptionCrudBill object,
+     * sets its size and location, and adds it to the content pane.
+     */
     private void openSallerPane() {
         Saller sallerPane = new Saller();
         sallerPane.setSize(750, 430);
@@ -71,6 +95,10 @@ public class Dashboard extends javax.swing.JFrame {
         content.repaint();
     }
 
+    /**
+     * Opens the openBillPFDPane pane. It creates a new OptionCrudBill object,
+     * sets its size and location, and adds it to the content pane.
+     */
     private void openBillPFDPane() {
         BillPDF billPDFPane = new BillPDF();
         billPDFPane.setSize(750, 430);
@@ -275,7 +303,9 @@ public class Dashboard extends javax.swing.JFrame {
         openBillPFDPane();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    // sing off 
+    /**
+     * Event then use de closeFrameAndOpenLogin controller method
+     */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         LoginCon.closeFrameAndOpenLogin(this);
     }//GEN-LAST:event_jButton5ActionPerformed
