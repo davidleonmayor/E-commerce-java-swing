@@ -36,8 +36,28 @@ public class MakePDF {
     public void header() throws DocumentException {
         // drawing ID bill
         Paragraph paragraph = new Paragraph("ID de la Factura: " + billSpecification.getId());
+        paragraph.setSpacingAfter(10);
+        document.add(paragraph);
+
+        // drawing client information
+        paragraph = new Paragraph("Cliente: " + billSpecification.getClientName() + " " + billSpecification.getClientLastName());
+        paragraph.setSpacingAfter(10);
+        document.add(paragraph);
+
+        // drawing seller information
+        paragraph = new Paragraph("Vendedor: " + billSpecification.getSellerName() + " " + billSpecification.getSellerLastName());
+        paragraph.setSpacingAfter(10);
+        document.add(paragraph);
+
+        // drawing box number
+        paragraph = new Paragraph("Número de caja: " + billSpecification.getBoxNumber());
+        paragraph.setSpacingAfter(10);
+        document.add(paragraph);
+
+        // drawing payment method
+        paragraph = new Paragraph("Método de pago: " + billSpecification.getPaymentMethod());
         paragraph.setSpacingAfter(50);
-        document.add(paragraph);        
+        document.add(paragraph);
     }
 
     private void addContent() throws DocumentException {
@@ -71,7 +91,13 @@ public class MakePDF {
             // increase amount with total product price
             totalAmount += product.getQuantity() * product.getUnitValue();
         }
+
+        // Add a cell at the end of the table with the total amount to pay
+        PdfPCell totalCell = new PdfPCell(new Phrase("Total a pagar: " + totalAmount));
+        totalCell.setColspan(3); // This will make the cell span 3 columns
+        table.addCell(totalCell);
+
         document.add(table);
-        document.add(new Paragraph("Total a pager: " + totalAmount)); // move this in the table, with only  two spaces
     }
+
 }
