@@ -1,11 +1,13 @@
 package com.mycompany.software.administrativo.ventas.views;
-
+/* TODO
+DONE: refactorizar y validar la toma de datos del usuario
+1) ralizar el correcto funcionamiento de la facura, pasandole no el ID de seller, client, Dandole el documento.
+2) refactorizar la creacion de la factura utilizando MVC,
+3) split function then can go in tool package
+*/
 import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -80,14 +82,8 @@ public class CreateBill extends javax.swing.JFrame {
 
         return true;
     }
-
-    public CreateBill() {
-        initComponents();
-
-        // Configurar el comportamiento de cierre
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    }
-
+    
+    
     /**
      * This method adds a product to the list of quality products.
      *
@@ -119,6 +115,13 @@ public class CreateBill extends javax.swing.JFrame {
         LocalTime currentTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         return currentTime.format(formatter);
+    }
+
+    public CreateBill() {
+        initComponents();
+
+        // Configurar el comportamiento de cierre
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     public int MyOptionPane() {
