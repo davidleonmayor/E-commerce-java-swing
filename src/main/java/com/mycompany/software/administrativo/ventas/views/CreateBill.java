@@ -1,11 +1,14 @@
 package com.mycompany.software.administrativo.ventas.views;
 
+/* TODO
+DONE: refactorizar y validar la toma de datos del usuario
+1) ralizar el correcto funcionamiento de la facura, pasandole no el ID de seller, client, Dandole el documento.
+2) refactorizar la creacion de la factura utilizando MVC,
+3) split function then can go in tool package
+ */
 import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +33,11 @@ public class CreateBill extends javax.swing.JFrame {
     private String nameProductInput;
     private float unitValueInput;
     private int quantityInput;
+
+    // metadata to end bill
+    final int idBillBoxDefult = 2;
+    final int documentSeller = 16; // Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+    final int idBillSellerDefult = 2; // deveria benir desde el logeado
 
     /**
      * Checks and cleans the user input. It validates the range, document
@@ -81,13 +89,6 @@ public class CreateBill extends javax.swing.JFrame {
         return true;
     }
 
-    public CreateBill() {
-        initComponents();
-
-        // Configurar el comportamiento de cierre
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    }
-
     /**
      * This method adds a product to the list of quality products.
      *
@@ -121,34 +122,60 @@ public class CreateBill extends javax.swing.JFrame {
         return currentTime.format(formatter);
     }
 
-    public int MyOptionPane() {
+    /**
+     * Solicita al usuario que introduzca un número entero. Si el usuario
+     * introduce algo que no es un número entero válido, se le seguirá pidiendo
+     * que introduzca un número hasta que lo haga correctamente.
+     *
+     * @param message El mensaje que se mostrará al usuario cuando se le
+     * solicite que introduzca un número.
+     * @return El número entero introducido por el usuario.
+     */
+    private int getIntegerFromUser(String message) {
+        while (true) {
+            String userInput = JOptionPane.showInputDialog(message);
+            try {
+                int number = Integer.parseInt(userInput);
+                if (number < 0) {
+                    JOptionPane.showMessageDialog(null, "Por favor, introduce un número positivo");
+                } else {
+                    return number;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Por favor, introduce un número válido");
+            }
+        }
+    }
+
+    public CreateBill() {
+        initComponents();
+
+        // Configurar el comportamiento de cierre
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    }
+
+    public String MyOptionPane() {
         Icon errorIcon = UIManager.getIcon("OptionPane.errorIcon");
-        Object[] possibilities = {"debit card", "credit card", "cash", "checks"};
+        Object[] possibilities = {"Tarjeta de débito", "Tarjeta de crédito", "Efectivo", "Cheques"};
         String selectedOption = (String) JOptionPane.showInputDialog(null,
                 "Seleccina el metodo de pago: ", "ShowInputDialog",
                 JOptionPane.PLAIN_MESSAGE, errorIcon, possibilities, "Numbers");
 
-        int paymentMethod;
-        switch (selectedOption) {
-            case "debit card":
-                paymentMethod = 1;
-                break;
-            case "credit card":
-                paymentMethod = 2;
-                break;
-            case "cash":
-                paymentMethod = 3;
-                break;
-            case "checks":
-                paymentMethod = 4;
-                break;
-            default:
-                paymentMethod = -1; // Valor por defecto en caso de que no se seleccione ninguna opción
-                break;
-        }
+        String res = switch (selectedOption) {
+            case "Tarjeta de débito" ->
+                "1";
+            case "Tarjeta de crédito" ->
+                "2";
+            case "Efectivo" ->
+                "3";
+            case "Cheques" ->
+                "4";
+            default ->
+                "-1"; // Valor por defecto en caso de que no se seleccione ninguna opción
+        };
 
-        System.out.println(paymentMethod);
-        return paymentMethod;
+        System.out.println("res" + res);
+        return res;
     }
 
     @SuppressWarnings("unchecked")
@@ -274,58 +301,37 @@ public class CreateBill extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Click event button then checks the get metadata user and product to the
+     * list of products, creates a new bill
+     *
+     * @param evt The ActionEvent object representing the button click event.
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // 1) input data user like document ETC
-        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
-        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
-        int buyOptionSelected = this.MyOptionPane();
-        int idBillClientDefult = 1;
-        int idBillSellerDefult = 2;
-        int idBillBoxDefult = 2;
+//        final int documentUser = getIntegerFromUser("Inserta la id unico del usuario en base de datos: ");
+        final int idBillClientDefult = getIntegerFromUser("Inserta la id unico del cliente en base de datos: ");
+        final int idBillSellertDefult = getIntegerFromUser("Inserta la id unico del vendedor en base de datos: ");
+        final String buyOptionSelected = MyOptionPane();
+        final String paymentMethod = "1"; // if work can remive this line
+        // date 
         String currentDate = this.getCurrentDate();
         String currentTime = this.getCurrentTime();
-        String paymentMethod = "1";
 
         // 2) execute SQL query
         ConnectionDB connectionDB = new ConnectionDB();
-        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
+        connectionDB.insertBill(idBillClientDefult, idBillSellertDefult, idBillBoxDefult, currentDate, currentTime, buyOptionSelected, qualityProducts);
 
-        // clear input boxes
+        // 3) clear input boxes
         inputNameProduct.setText("");
         inputUnitaryValueProduct.setText("");
         inputQualityProduct.setText("");
-
-        // ------------- code pass method -------------
-//        // input data user
-//        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
-//        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
-//        int buyOptionSelected = this.MyOptionPane();
-//        // initialize the SQL query
-//        ConnectionDB connectionDB = new ConnectionDB();
-//        int idBillClientDefult = 1;
-//        int idBillSellerDefult = 2;
-//        int idBillBoxDefult = 2;
-//        String currentDate = this.getCurrentDate();
-//        String currentTime = this.getCurrentTime();
-//        String paymentMethod = "1";
-//        String nameProduct = inputNameProduct.getText();
-//        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
-//        int quality = Integer.parseInt(inputQualityProduct.getText());
-//        // execute query
-//        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
-//
-//        // clear input boxes
-//        inputNameProduct.setText("");
-//        inputUnitaryValueProduct.setText("");
-//        inputQualityProduct.setText("");
-        // insertBill();
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
-     * Called when the button is clicked. It checks the user input, adds a
-     * product to the list of products, creates and adds a new panel to jPanel3,
-     * and clears the input fields.
+     * Click event button then checks the user input, adds a product to the list
+     * of products, creates and adds a new panel to jPanel3, and clears the
+     * input fields.
      *
      * @param evt The ActionEvent object representing the button click event.
      */
