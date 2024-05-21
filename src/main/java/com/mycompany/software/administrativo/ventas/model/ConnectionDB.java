@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Responsible for managing the permissions to database
+ */
 public class ConnectionDB {
 
     private String nameDatabase = "software_administrativo_ventas";
@@ -40,6 +43,9 @@ public class ConnectionDB {
     protected Statement stmt;
     protected ResultSet rs;
 
+    /**
+     * Constructor initializes the database driver and establishes a connection with the database.
+     */
     public ConnectionDB() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -51,6 +57,9 @@ public class ConnectionDB {
         }
     }
 
+    /**
+     * Closes the result set and the database connection.
+     */
     public void close() {
         try {
             if (rs != null) {

@@ -4,25 +4,82 @@ import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-// TODO:
-// 1) Manage and check data input user
-// 2) Sendd to data base, related each input with jis own
+/**
+ * Extends javax.swing.JFrame and represents the frame then contains the feature
+ * to crate a bill
+ */
 public class CreateBill extends javax.swing.JFrame {
 
+    // A list of quality products to be added to the bill.
     private List<Product> qualityProducts = new ArrayList<>();
+
+    // variables to check input user 
+    private String nameProductInput;
+    private float unitValueInput;
+    private int quantityInput;
+
+    /**
+     * Checks and cleans the user input. It validates the range, document
+     * number, and password entered by the user.
+     *
+     * @return True if the input is valid, false otherwise.
+     */
+    private boolean checkAndCleanInputUser() {
+        // Validate that the range is not empty
+        nameProductInput = inputNameProduct.getText().trim();
+        if (nameProductInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, introduce un nombre");
+            return false;
+        }
+        // Regular expressionue check string no contain numbers and rare characters
+        String regex = "^[a-zA-Z\\sáéíóúÁÉÍÓÚñÑ]+$";
+        if (!nameProductInput.matches(regex)) {
+            JOptionPane.showMessageDialog(this, "El nombre no debe contener números ni caracteres especiales");
+            return false;
+        }
+        // Validate that the unitValue is not empty
+        String unitValueInputStr = inputUnitaryValueProduct.getText().trim();
+        // Float unitValueInput = Float.parseFloat(inputUnitaryValueProduct.getText().trim());
+        if (unitValueInputStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, introduce un valor unitario");
+            return false;
+        }
+        // Try to convert the document to an integer
+        try {
+            unitValueInput = Float.parseFloat(inputUnitaryValueProduct.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, introduce un número válido para el valor unitario");
+            return false;
+        }
+        // Validate that the quality is not empty
+        String quantityInputStr = inputQualityProduct.getText().trim();
+        if (quantityInputStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, introduce una cantidad");
+            return false;
+        }
+        // Try to convert the quantity to an integer
+        try {
+            quantityInput = Integer.parseInt(quantityInputStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor introdusca un número valido para la cantidad");
+            return false;
+        }
+
+        return true;
+    }
 
     public CreateBill() {
         initComponents();
@@ -31,67 +88,37 @@ public class CreateBill extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
+    /**
+     * This method adds a product to the list of quality products.
+     *
+     * @param name The name of the product.
+     * @param unitValue The unit value of the product.
+     * @param quantity The quantity of the product.
+     */
     private void setItemInQualityProducts(String name, float unitValue, int quantity) {
         qualityProducts.add(new Product(name, unitValue, quantity));
     }
 
+    /**
+     * Returns the current date as a string in the format "yyyy-MM-dd".
+     *
+     * @return A String representing the current date.
+     */
     private /*public static*/ String getCurrentDate() {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return currentDate.format(formatter);
     }
 
+    /**
+     * Returns the current time as a string in the format "HH:mm:ss".
+     *
+     * @return The current time as a string.
+     */
     private /*public static*/ String getCurrentTime() {
         LocalTime currentTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         return currentTime.format(formatter);
-    }
-
-    private void finalizeBill() throws SQLException {
-        // input data user
-        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
-        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
-        int buyOptionSelected = this.MyOptionPane();
-        // initialize the SQL query
-        ConnectionDB connectionDB = new ConnectionDB();
-        int idBillClientDefult = 1;
-        int idBillSellerDefult = 2;
-        int idBillBoxDefult = 2;
-        String currentDate = this.getCurrentDate();
-        String currentTime = this.getCurrentTime();
-        String paymentMethod = "1";
-
-        // execute query
-        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
-
-        // clear input boxes
-        inputNameProduct.setText("");
-        inputUnitaryValueProduct.setText("");
-        inputQualityProduct.setText("");
-
-        // ------------- code pass method -------------
-//        // input data user
-//        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
-//        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
-//        int buyOptionSelected = this.MyOptionPane();
-//        // initialize the SQL query
-//        ConnectionDB connectionDB = new ConnectionDB();
-//        int idBillClientDefult = 1;
-//        int idBillSellerDefult = 2;
-//        int idBillBoxDefult = 2;
-//        String currentDate = this.getCurrentDate();
-//        String currentTime = this.getCurrentTime();
-//        String paymentMethod = "1";
-//        String nameProduct = inputNameProduct.getText();
-//        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
-//        int quality = Integer.parseInt(inputQualityProduct.getText());
-//        // execute query
-//        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
-//
-//        // clear input boxes
-//        inputNameProduct.setText("");
-//        inputUnitaryValueProduct.setText("");
-//        inputQualityProduct.setText("");
     }
 
     public int MyOptionPane() {
@@ -248,47 +275,80 @@ public class CreateBill extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            this.finalizeBill();
-            // insertBill();
-        } catch (SQLException ex) {
-            Logger.getLogger(CreateBill.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // 1) input data user like document ETC
+        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+        int buyOptionSelected = this.MyOptionPane();
+        int idBillClientDefult = 1;
+        int idBillSellerDefult = 2;
+        int idBillBoxDefult = 2;
+        String currentDate = this.getCurrentDate();
+        String currentTime = this.getCurrentTime();
+        String paymentMethod = "1";
+
+        // 2) execute SQL query
+        ConnectionDB connectionDB = new ConnectionDB();
+        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, qualityProducts);
+
+        // clear input boxes
+        inputNameProduct.setText("");
+        inputUnitaryValueProduct.setText("");
+        inputQualityProduct.setText("");
+
+        // ------------- code pass method -------------
+//        // input data user
+//        int documentUser = Integer.parseInt(JOptionPane.showInputDialog("Inserta la id unico del usuario en base de datos: "));
+//        int documentSeller = Integer.parseInt(JOptionPane.showInputDialog("Inserta el id unico del vendedor en base de datos: "));
+//        int buyOptionSelected = this.MyOptionPane();
+//        // initialize the SQL query
+//        ConnectionDB connectionDB = new ConnectionDB();
+//        int idBillClientDefult = 1;
+//        int idBillSellerDefult = 2;
+//        int idBillBoxDefult = 2;
+//        String currentDate = this.getCurrentDate();
+//        String currentTime = this.getCurrentTime();
+//        String paymentMethod = "1";
+//        String nameProduct = inputNameProduct.getText();
+//        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText());
+//        int quality = Integer.parseInt(inputQualityProduct.getText());
+//        // execute query
+//        connectionDB.insertBill(idBillClientDefult, idBillSellerDefult, idBillBoxDefult, currentDate, currentTime, paymentMethod, nameProduct, unitValue, quality);
+//
+//        // clear input boxes
+//        inputNameProduct.setText("");
+//        inputUnitaryValueProduct.setText("");
+//        inputQualityProduct.setText("");
+        // insertBill();
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * Called when the button is clicked. It checks the user input, adds a
+     * product to the list of products, creates and adds a new panel to jPanel3,
+     * and clears the input fields.
+     *
+     * @param evt The ActionEvent object representing the button click event.
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        // Obtiene los valores de los campos de entrada
-        String name = inputNameProduct.getText().trim();
-        float unitValue = Float.parseFloat(inputUnitaryValueProduct.getText().trim());
-        int quantity = Integer.parseInt(inputQualityProduct.getText().trim());
+        // 1) check correct data 
+        if (!checkAndCleanInputUser()) {
+            return;
+        }
 
-        // agregar producto a la lista de productos que se pasa al generar la bill
-        qualityProducts.add(new Product(name, unitValue, quantity));
-
-// Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
-        ContainerProductEspesification panel = new ContainerProductEspesification(name, unitValue, quantity);
-
-        // Agrega el panel a jPanel3
-        jPanel3.add(panel);
-
+        // 2) agregar producto a la lista de productos que se pasa al generar la bill
+        qualityProducts.add(new Product(nameProductInput, unitValueInput, quantityInput));
+        // Crea una nueva instancia de ContainerProductEspesification con los valores ingresados
+        ContainerProductEspesification panel = new ContainerProductEspesification(nameProductInput, unitValueInput, quantityInput);
+        jPanel3.add(panel); // Agrega el panel a jPanel3
         // Actualiza jPanel3 para mostrar el nuevo panel
         jPanel3.revalidate();
         jPanel3.repaint();
 
-        // Limpia los campos de entrada para la próxima entrada
+        // 3) Limpia los campos de entrada para la próxima entrada
         inputNameProduct.setText("");
         inputUnitaryValueProduct.setText("");
         inputQualityProduct.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CreateBill().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField inputNameProduct;
