@@ -9,13 +9,13 @@ import java.sql.ResultSet;
 
 import com.mycompany.software.administrativo.ventas.tools.Bill;
 import com.mycompany.software.administrativo.ventas.tools.Product;
-import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BillQuery extends ConnectionDB {
-    private final Statement statement;
+
+    private Statement statement;
     private ResultSet resultSet;
 
     private final String tableName = "bills";
@@ -34,9 +34,73 @@ public class BillQuery extends ConnectionDB {
     private final String rawQueryRemove = "DELETE FROM " + tableName + " WHERE id_bills=";
     private final String rawQueryAdd = "INSERT INTO " + tableName;
 
-    public BillQuery() throws SQLException {
-        super();
-        statement = this.con.createStatement();
+    /**
+     * Inserts a new bill record along with associated details and products.
+     *
+     * @param documentClient The client's document ID.
+     * @param documentSeller The seller's document ID.
+     * @param idBillBox The ID of the bill box.
+     * @param fecha The date of the bill.
+     * @param hora The time of the bill.
+     * @param paymentMethod The payment method used.
+     * @param products A list of products associated with the bill.
+     * @return True if the insertion was successful, false otherwise.
+     */
+    public boolean insertNew(int documentClient, int documentSeller, int idBillBox, String fecha, String hora, String paymentMethod, List<Product> products) {
+        try {
+            // Insert into the 'bills' table
+            String insertBillQuery = "INSERT INTO `bills` (`document_client`, `document_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement billStmt = this.con.prepareStatement(insertBillQuery, Statement.RETURN_GENERATED_KEYS);
+            billStmt.setInt(1, documentClient);
+            billStmt.setInt(2, documentSeller);
+            billStmt.setInt(3, idBillBox);
+            billStmt.setString(4, fecha);
+            billStmt.setString(5, hora);
+            billStmt.executeUpdate();
+
+            // Get the last inserted ID in 'bills'
+            ResultSet generatedKeys = billStmt.getGeneratedKeys();
+            int lastIdInBills = -1;
+            if (generatedKeys.next()) {
+                lastIdInBills = generatedKeys.getInt(1);
+
+                // Insert into the 'bill_details' table using the last ID inserted in 'bills'
+                String insertBillDetailsQuery = "INSERT INTO `bill_details` (`id_bill`, `payment_method`) VALUES (?, ?)";
+                PreparedStatement billDetailsStmt = this.con.prepareStatement(insertBillDetailsQuery, Statement.RETURN_GENERATED_KEYS);
+                billDetailsStmt.setInt(1, lastIdInBills);
+                billDetailsStmt.setString(2, paymentMethod);
+                billDetailsStmt.executeUpdate();
+
+                // Get the last inserted ID in 'bill_details'
+                generatedKeys = billDetailsStmt.getGeneratedKeys();
+                int lastIdInBillDetails = -1;
+                if (generatedKeys.next()) {
+                    lastIdInBillDetails = generatedKeys.getInt(1);
+
+                    // Insert into the 'products' table using the last ID inserted in 'bill_details'
+                    String insertProductQuery = "INSERT INTO `products` (`id_bill_details_product`, `product_name`, `unit_value`, `quantity`) VALUES (?, ?, ?, ?)";
+                    PreparedStatement productStmt = this.con.prepareStatement(insertProductQuery);
+                    for (Product product : products) {
+                        productStmt.setInt(1, lastIdInBillDetails);
+                        productStmt.setString(2, product.getProductName());
+                        productStmt.setDouble(3, product.getUnitValue());
+                        productStmt.setInt(4, product.getQuantity());
+                        productStmt.executeUpdate();
+                    }
+                }
+            }
+
+            // Si llegamos hasta aquí, todas las inserciones se realizaron correctamente
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } finally {
+            this.close(); // Cerrar la conexión
+        }
+
+        // Si hubo algún problema, retornamos falso
+        return false;
     }
 
     public void all() {
@@ -76,9 +140,11 @@ public class BillQuery extends ConnectionDB {
             // Si hubo al menos una factura, cerrar con una línea
             if (!firstLine) {
                 System.out.println("---------------------------------------------------");
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connection.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -128,9 +194,11 @@ public class BillQuery extends ConnectionDB {
                 pstmtProduct.setInt(4, billDetailId);
                 // Ejecutar la consulta SQL
                 pstmtProduct.executeUpdate();
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connection.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -138,8 +206,10 @@ public class BillQuery extends ConnectionDB {
         try {
             statement.executeUpdate(rawQueryRemove + String.valueOf(billId));
 //            System.out.println("ID:" + resultSet.getString("id") + " id usuario: " + resultSet.getString("id usuario"));
+
         } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connection.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

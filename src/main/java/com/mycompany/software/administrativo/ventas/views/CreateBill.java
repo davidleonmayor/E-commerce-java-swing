@@ -1,12 +1,13 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-/* TODO
-DONE: refactorizar y validar la toma de datos del usuario
-1) ralizar el correcto funcionamiento de la facura, pasandole no el ID de seller, client, Dandole el documento.
+/* TODO 
+DONE 1)refactorizar y validar la toma de datos del usuario
+DONE 1) ralizar el correcto funcionamiento de la facura, pasandole no el ID de seller, client, Dandole el documento.
 2) refactorizar la creacion de la factura utilizando MVC,
 3) split function then can go in tool package
  */
 import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
+import com.mycompany.software.administrativo.ventas.model.BillQuery;
 import com.mycompany.software.administrativo.ventas.tools.Product;
 import java.time.LocalDate;
 
@@ -87,17 +88,6 @@ public class CreateBill extends javax.swing.JFrame {
         }
 
         return true;
-    }
-
-    /**
-     * This method adds a product to the list of quality products.
-     *
-     * @param name The name of the product.
-     * @param unitValue The unit value of the product.
-     * @param quantity The quantity of the product.
-     */
-    private void setItemInQualityProducts(String name, float unitValue, int quantity) {
-        qualityProducts.add(new Product(name, unitValue, quantity));
     }
 
     /**
@@ -310,8 +300,8 @@ public class CreateBill extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // 1) input data user like document ETC
         //final int documentUser = getIntegerFromUser("Inserta la id unico del usuario en base de datos: ");
-        final int clientDocumentInput = getIntegerFromUser("Inserta el documento del usuario que realiza la compra");
-        final int sellerDocumentInput = getIntegerFromUser("Inserta el documento del venddor que realiza la venta");
+        final int clientDocumentInput = getIntegerFromUser("Inserta el documento del cliente que realiza la compra");
+        final int sellerDocumentInput = getIntegerFromUser("Inserta el documento del vendedor que realiza la venta");
         final String buyOptionSelected = MyOptionPane();
         // final String paymentMethod = "1"; // if work can remive this line
         // date 
@@ -319,8 +309,13 @@ public class CreateBill extends javax.swing.JFrame {
         String currentTime = this.getCurrentTime();
 
         // 2) execute SQL query
-        ConnectionDB connectionDB = new ConnectionDB();
-        connectionDB.insertBill(clientDocumentInput, sellerDocumentInput, idBillBoxDefult, currentDate, currentTime, buyOptionSelected, qualityProducts);
+        BillQuery billQuery = new BillQuery();
+        boolean insertBillResponse = billQuery.insertNew(clientDocumentInput, sellerDocumentInput, idBillBoxDefult, currentDate, currentTime, buyOptionSelected, qualityProducts);
+        if (!insertBillResponse) {
+            JOptionPane.showMessageDialog(null, "Ocurrio un error al creaer la factura");
+        } else {
+            JOptionPane.showMessageDialog(null, "la factura se creo correctam");
+        }
 
         // 3) clear inputs and products session
         inputNameProduct.setText("");
