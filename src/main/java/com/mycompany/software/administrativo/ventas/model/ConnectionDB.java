@@ -44,7 +44,8 @@ public class ConnectionDB {
     protected ResultSet rs;
 
     /**
-     * Constructor initializes the database driver and establishes a connection with the database.
+     * Constructor initializes the database driver and establishes a connection
+     * with the database.
      */
     public ConnectionDB() {
         try {
@@ -144,30 +145,40 @@ public class ConnectionDB {
         return matchingIds;
     }
 
-    public void insertBill(int idBillClient, int idBillSeller, int idBillBox, String fecha, String hora, String paymentMethod, List<Product> products) {
-        System.out.println("----------------medodo de validacion--------------");
+    /**
+     * Inserts a new bill into the database.
+     *
+     * @param documentClient the document number of the client for the bill
+     * @param documentSeller the document number of the seller for the bill
+     * @param idBillBox the ID of the box for the bill
+     * @param fecha the date of the bill
+     * @param hora the time of the bill
+     * @param paymentMethod the payment method for the bill
+     * @param products the list of products included in the bill
+     */
+    public void insertBill(int documentClient, int documentSeller, int idBillBox, String fecha, String hora, String paymentMethod, List<Product> products) {
         try {
-            // Inserta en la tabla 'bills'
-            stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `id_bill_client`, `id_bill_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '" + idBillClient + "', '" + idBillSeller + "', '" + idBillBox + "', '" + fecha + "', '" + hora + "')", Statement.RETURN_GENERATED_KEYS);
+            // Insert into the 'bills' table
+            stmt.executeUpdate("INSERT INTO `bills` (`id_bill`, `document_client`, `document_seller`, `id_bill_box`, `fecha`, `hora`) VALUES (NULL, '" + documentClient + "', '" + documentSeller + "', '" + idBillBox + "', '" + fecha + "', '" + hora + "')", Statement.RETURN_GENERATED_KEYS);
 
-            // Obtiene el último ID insertado en 'bills'
+            // Get the last inserted ID in 'bills'
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             int lastIdInBills = -1;
             if (generatedKeys.next()) {
                 lastIdInBills = generatedKeys.getInt(1);
 
-                // Inserta en la tabla 'bill_details' usando el último ID insertado en 'bills'
+                // Insert into the 'bill_details' table using the last ID inserted in 'bills'
                 stmt.executeUpdate("INSERT INTO `bill_details` (`id_bill_detail`, `id_bill`, `payment_method`) VALUES (NULL, " + lastIdInBills + ", '" + paymentMethod + "')", Statement.RETURN_GENERATED_KEYS);
 
-                // Obtiene el último ID insertado en 'bill_details'
+                // Get the last inserted ID in 'bill_details'
                 generatedKeys = stmt.getGeneratedKeys();
                 int lastIdInBillDetails = -1;
                 if (generatedKeys.next()) {
                     lastIdInBillDetails = generatedKeys.getInt(1);
 
-                    // Inserta en la tabla 'products' usando el último ID insertado en 'bill_details'
+                    // Insert into the 'products' table using the last ID inserted in 'bill_details'
                     for (Product product : products) {
-                        stmt.executeUpdate("INSERT INTO `products` (`id_product`, `product_name`, `unit_value`, `quantity`, `id_bill_details_product`) VALUES (NULL, '" + product.getProductName() + "', '" + product.getUnitValue() + "', '" + product.getQuantity() + "', " + lastIdInBillDetails + ")");
+                        stmt.executeUpdate("INSERT INTO `products` (`id_product`, `id_bill_details_product`, `product_name`, `unit_value`, `quantity`) VALUES (NULL, " + lastIdInBillDetails + ", '" + product.getProductName() + "', '" + product.getUnitValue() + "', '" + product.getQuantity() + "')");
                     }
                 }
             }

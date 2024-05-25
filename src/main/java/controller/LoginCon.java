@@ -33,6 +33,7 @@ public class LoginCon {
      */
     public void accesToDashboardLikeManager(int document, String hashedPassword) {
         if (loginQuery.checkIfManagerExist(document, hashedPassword)) {
+            System.out.println("llego asta qui");
             new Dashboard(1).setVisible(true); // para metro (1) es para gerentes
             login.close();
         } else {

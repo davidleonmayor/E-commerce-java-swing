@@ -309,23 +309,26 @@ public class CreateBill extends javax.swing.JFrame {
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // 1) input data user like document ETC
-//        final int documentUser = getIntegerFromUser("Inserta la id unico del usuario en base de datos: ");
-        final int idBillClientDefult = getIntegerFromUser("Inserta la id unico del cliente en base de datos: ");
-        final int idBillSellertDefult = getIntegerFromUser("Inserta la id unico del vendedor en base de datos: ");
+        //final int documentUser = getIntegerFromUser("Inserta la id unico del usuario en base de datos: ");
+        final int clientDocumentInput = getIntegerFromUser("Inserta el documento del usuario que realiza la compra");
+        final int sellerDocumentInput = getIntegerFromUser("Inserta el documento del venddor que realiza la venta");
         final String buyOptionSelected = MyOptionPane();
-        final String paymentMethod = "1"; // if work can remive this line
+        // final String paymentMethod = "1"; // if work can remive this line
         // date 
         String currentDate = this.getCurrentDate();
         String currentTime = this.getCurrentTime();
 
         // 2) execute SQL query
         ConnectionDB connectionDB = new ConnectionDB();
-        connectionDB.insertBill(idBillClientDefult, idBillSellertDefult, idBillBoxDefult, currentDate, currentTime, buyOptionSelected, qualityProducts);
+        connectionDB.insertBill(clientDocumentInput, sellerDocumentInput, idBillBoxDefult, currentDate, currentTime, buyOptionSelected, qualityProducts);
 
-        // 3) clear input boxes
+        // 3) clear inputs and products session
         inputNameProduct.setText("");
         inputUnitaryValueProduct.setText("");
         inputQualityProduct.setText("");
+        jPanel3.removeAll();
+        jPanel3.validate();
+        jPanel3.repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

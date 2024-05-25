@@ -22,11 +22,13 @@
 */
 package com.mycompany.software.administrativo.ventas;
 
+import com.mycompany.software.administrativo.ventas.model.SellerQuery;
 import com.mycompany.software.administrativo.ventas.views.Login;
 
 public class SoftwareAdministrativoVentas {
 
     public static void main(String[] args) {
+        System.out.println(SellerQuery.hashPassword("2"));
         new Login().setVisible(true);
     }
 }

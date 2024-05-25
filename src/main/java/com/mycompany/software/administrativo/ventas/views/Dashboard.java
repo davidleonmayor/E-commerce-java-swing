@@ -310,6 +310,15 @@ public class Dashboard extends javax.swing.JFrame {
         LoginCon.closeFrameAndOpenLogin(this);
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Dashboard(1).setVisible(true);
+            }
+        });
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
     private javax.swing.JPanel content;
