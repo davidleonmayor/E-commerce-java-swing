@@ -234,8 +234,8 @@ public class ConnectionDB {
                     + "x.box_number, bd.payment_method, "
                     + "p.product_name, p.unit_value, p.quantity "
                     + "FROM bills b "
-                    + "JOIN clients c ON b.id_bill_client = c.id_client "
-                    + "JOIN sellers s ON b.id_bill_seller = s.id_seller "
+                    + "JOIN clients c ON b.document_client = c.document "  // change
+                    + "JOIN sellers s ON b.document_seller = s.document "
                     + "JOIN boxes x ON b.id_bill_box = x.id_box "
                     + "JOIN bill_details bd ON b.id_bill = bd.id_bill "
                     + "JOIN products p ON bd.id_bill_detail = p.id_bill_details_product "

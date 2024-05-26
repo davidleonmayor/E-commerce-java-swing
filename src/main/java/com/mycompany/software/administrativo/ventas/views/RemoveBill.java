@@ -1,22 +1,15 @@
 package com.mycompany.software.administrativo.ventas.views;
 
-import com.mycompany.software.administrativo.ventas.model.BillQuery;
 import com.mycompany.software.administrativo.ventas.model.ConnectionDB;
 import com.mycompany.software.administrativo.ventas.tools.Product;
-import com.mycompany.software.administrativo.ventas.tools.Bill;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;

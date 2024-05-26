@@ -1,3 +1,5 @@
+// TODO: principalmente hacer el de eliminar una factura el RemoveBill
+
 /* TODO: 
 1) agregar clase abstracta requerida 
 2) CRUD requerido :check
