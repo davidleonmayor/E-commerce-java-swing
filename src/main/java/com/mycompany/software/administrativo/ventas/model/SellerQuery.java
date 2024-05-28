@@ -36,11 +36,11 @@ public class SellerQuery extends ConnectionDB {
     }
 
     public void create(int document, String password, String names, String last_names) {
-        String hashedPassword = hashPassword(password);
-        System.out.println("hashed password: " + hashedPassword);
+//        String hashedPassword = hashPassword(password);
+//        System.out.println("hashed password: " + hashedPassword);
 
         try {
-            String query = "INSERT INTO `sellers` (`document`, `password_sellers`, `names`, `last_names`) VALUES (" + document + ", '" + hashedPassword + "', '" + names + "', '" + last_names + "')";
+            String query = "INSERT INTO `sellers` (`document`, `password_sellers`, `names`, `last_names`) VALUES (" + document + ", '" + password + "', '" + names + "', '" + last_names + "')";
             this.stmt.executeUpdate(query);
             System.out.println("Created");
 

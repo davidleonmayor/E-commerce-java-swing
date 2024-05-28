@@ -113,11 +113,11 @@ public class Saller extends javax.swing.JPanel {
             }
         });
         // check user only write numbers
-        passwordInput.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                validateNumericInput(e);
-            }
-        });
+//        passwordInput.addKeyListener(new KeyAdapter() {
+//            public void keyTyped(KeyEvent e) {
+//                validateNumericInput(e);
+//            }
+//        });
     }
 
     private void validateNumericInput(KeyEvent e) {
@@ -389,13 +389,14 @@ public class Saller extends javax.swing.JPanel {
         try {
             document = Integer.parseInt(documentStr);
             password = Integer.parseInt(passwordStr);
+
+            // 3. Make a new saller with the captured user data
+            SellerQuery sellerQuery = new SellerQuery();
+            String hashPassword = sellerQuery.hashPassword(passwordStr);
+            sellerQuery.create(document, hashPassword, names, lastNames);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El documento y la contraseña deben ser números enteros válidos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // 3. Make a new saller with the captured user data
-        SellerQuery sellerQuery = new SellerQuery();
-        sellerQuery.create(document, Integer.toString(password), names, lastNames);
 
         // 4. clear inputs
         documentInput.setText("");
